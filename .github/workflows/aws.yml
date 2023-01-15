@@ -53,8 +53,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
       with:
-        dockerfile: Dockerfile
-        repository: DEND-Capstone-Spark-AWS
+        registry: docker.pkg.github.com
+        repository: controlmachine/DEND-Capstone-Spark-AWS
         tag_with_ref: true
 
     - name: Configure AWS credentials
