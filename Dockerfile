@@ -6,7 +6,7 @@ ENV HADOOP_VERSION 2.7
 RUN apt-get update && apt-get install -y curl openjdk-11-jre-headless
 
 RUN curl -sL --retry 3 \
-  "http://mirrors.ocf.berkeley.edu/apache/spark/spark-$SPARK_VERSION/spark-$SPARK_VERSION-bin-hadoop$HADOOP_VERSION.tgz" \
+  "https://archive.apache.org/dist/spark/spark-$SPARK_VERSION/spark-$SPARK_VERSION-bin-hadoop$HADOOP_VERSION.tgz" \
   | tar xz -C /usr/local/
 
 ENV SPARK_HOME /usr/local/spark-$SPARK_VERSION-bin-hadoop$HADOOP_VERSION
