@@ -1,4 +1,4 @@
-name: PySpark Job
+name: Upload to S3
 
 on:
   push:
@@ -6,20 +6,21 @@ on:
       - main
 
 jobs:
-  build-and-run:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
+    - name: Set up AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
       with:
-        python-version: 3.8
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-west-2
 
-    - name: Install dependencies
-      run: pip install -r requirements.txt
-
-    - name: Submit Job to EMR
-      run: aws emr add-steps --cluster-id j-8ZMGLX96TCJO --steps Type=Spark,Name="dataset_crawler",Args=[--conf,spark.yarn.submit.waitAppCompletion=true,"simple-spark-app.py"]
+    - name: Upload spark-app.py to S3
+      uses: aws-actions/aws-cli@v1
+      with:
+        args: s3 cp simple-spark-app.py s3://mysparkawsbucket/spark-app.py
