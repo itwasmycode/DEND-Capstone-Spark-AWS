@@ -56,3 +56,4 @@ Outputs:
     Value: !Ref EMRCluster
     Export:
       Name: EMRClusterId
+      
