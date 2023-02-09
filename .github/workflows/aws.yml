@@ -33,8 +33,8 @@ jobs:
       if: matrix.deployment == 'cloudformation'
       uses: aws-actions/aws-cloudformation-github-deploy@v1.1.0
       with:
-        template-file: cloudformation/cloudformation.yml
-        stack-name: my-cloudformation-stack
+        template: cloudformation/cloudformation.yml
+        name: my-cloudformation-stack
         capabilities: CAPABILITY_IAM
 
 
