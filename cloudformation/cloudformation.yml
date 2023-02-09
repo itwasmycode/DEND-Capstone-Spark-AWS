@@ -38,10 +38,6 @@ Resources:
             SpotSpecification:
               TimeoutDurationMinutes: 120
               TimeToLiveTimeoutMinutes: 240
-      AutoScalingPolicy:
-        Constraints:
-          MinCapacity: 2
-          MaxCapacity: 20
       ScaleDownBehavior: TERMINATE_AT_TASK_COMPLETION
       EBSRootVolumeSize: 20
       VisibleToAllUsers: true
