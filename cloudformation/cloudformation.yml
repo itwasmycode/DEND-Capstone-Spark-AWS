@@ -30,14 +30,6 @@ Resources:
       ReleaseLabel: "emr-6.2.0"
       Applications:
         - Name: "Hadoop"
-      InstanceFleetConfigs:
-        - InstanceTypeConfigs:
-          - InstanceType: "m5.xlarge"
-            BidPriceAsPercentageOfOnDemandPrice: 100
-          LaunchSpecifications:
-            SpotSpecification:
-              TimeoutDurationMinutes: 120
-              TimeToLiveTimeoutMinutes: 240
       ScaleDownBehavior: TERMINATE_AT_TASK_COMPLETION
       EBSRootVolumeSize: 20
       VisibleToAllUsers: true
