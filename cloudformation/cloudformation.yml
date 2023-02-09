@@ -35,7 +35,7 @@ Resources:
       ServiceRole: !GetAtt IAMRole.Arn
       Steps:
         - Name: "Run custom script"
-          ActionOnFailure: TERMINATE_CLUSTER
+          ActionOnFailure: CONTINUE
           HadoopJarStep:
             Jar: "command-runner.jar"
             Args:
