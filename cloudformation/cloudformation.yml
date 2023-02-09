@@ -1,5 +1,28 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Resources:
+  IAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - ec2.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: /
+      Policies:
+      - PolicyName: emr-default-role-policy
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Action:
+            - '*'
+            Effect: Allow
+            Resource: '*'
+            
   EMRCluster:
     Type: "AWS::EMR::Cluster"
     Properties:
@@ -22,8 +45,8 @@ Resources:
       ScaleDownBehavior: TERMINATE_AT_TASK_COMPLETION
       EBSRootVolumeSize: 20
       VisibleToAllUsers: true
-      JobFlowRole: "EMR_EC2_DefaultRole"
-      ServiceRole: "EMR_DefaultRole"
+      JobFlowRole: !GetAtt IAMRole.Arn
+      ServiceRole: !GetAtt IAMRole.Arn
       Steps:
         - Name: "Run custom script"
           ActionOnFailure: TERMINATE_CLUSTER
@@ -32,33 +55,6 @@ Resources:
             Args:
               - "spark-submit"
               - "s3://mysparkawsbucket/spark-app.py"
-  EMRDefaultRolePolicy:
-    Type: "AWS::IAM::Policy"
-    Properties:
-      PolicyName: "EMRDefaultRolePolicy"
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: "Allow"
-            Action:
-              - "s3:*"
-            Resource: "*"
-      Roles:
-        - !Ref "EMR_DefaultRole"
-  EMREC2DefaultRolePolicy:
-    Type: "AWS::IAM::Policy"
-    Properties:
-      PolicyName: "EMREC2DefaultRolePolicy"
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: "Allow"
-            Action:
-              - "s3:*"
-            Resource: "*"
-      Roles:
-        - !Ref "EMR_EC2_DefaultRole"
-
 Outputs:
   EMRClusterId:
     Value: !Ref EMRCluster
