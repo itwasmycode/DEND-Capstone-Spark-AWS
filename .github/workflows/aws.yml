@@ -31,7 +31,7 @@ jobs:
 
     - name: Deploy CloudFormation stack
       if: matrix.deployment == 'cloudformation'
-      uses: aws-actions/cloudformation-deploy@v1
+      uses: aws-actions/aws-cloudformation-github-deploy@v1.1.0
       with:
         template-file: cloudformation/cloudformation.yml
         stack-name: my-cloudformation-stack
