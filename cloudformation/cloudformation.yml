@@ -1,0 +1,66 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  EMRCluster:
+    Type: "AWS::EMR::Cluster"
+    Properties:
+      Name: "EMR Serverless Cluster"
+      ReleaseLabel: "emr-6.2.0"
+      Applications:
+        - Name: "Hadoop"
+      InstanceFleetConfigs:
+        - InstanceTypeConfigs:
+          - InstanceType: "m5.xlarge"
+            BidPriceAsPercentageOfOnDemandPrice: 100
+          LaunchSpecifications:
+            SpotSpecification:
+              TimeoutDurationMinutes: 120
+              TimeToLiveTimeoutMinutes: 240
+      AutoScalingPolicy:
+        Constraints:
+          MinCapacity: 2
+          MaxCapacity: 20
+      ScaleDownBehavior: TERMINATE_AT_TASK_COMPLETION
+      EBSRootVolumeSize: 20
+      VisibleToAllUsers: true
+      JobFlowRole: "EMR_EC2_DefaultRole"
+      ServiceRole: "EMR_DefaultRole"
+      Steps:
+        - Name: "Run custom script"
+          ActionOnFailure: TERMINATE_CLUSTER
+          HadoopJarStep:
+            Jar: "command-runner.jar"
+            Args:
+              - "spark-submit"
+              - "s3://mysparkawsbucket/spark-app.py"
+  EMRDefaultRolePolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "EMRDefaultRolePolicy"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action:
+              - "s3:*"
+            Resource: "*"
+      Roles:
+        - !Ref "EMR_DefaultRole"
+  EMREC2DefaultRolePolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "EMREC2DefaultRolePolicy"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action:
+              - "s3:*"
+            Resource: "*"
+      Roles:
+        - !Ref "EMR_EC2_DefaultRole"
+
+Outputs:
+  EMRClusterId:
+    Value: !Ref EMRCluster
+    Export:
+      Name: EMRClusterId
