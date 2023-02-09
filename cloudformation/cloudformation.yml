@@ -31,8 +31,6 @@ Resources:
       Applications:
         - Name: "Hadoop"
       ScaleDownBehavior: TERMINATE_AT_TASK_COMPLETION
-      EBSRootVolumeSize: 20
-      VisibleToAllUsers: true
       JobFlowRole: !GetAtt IAMRole.Arn
       ServiceRole: !GetAtt IAMRole.Arn
       Steps:
