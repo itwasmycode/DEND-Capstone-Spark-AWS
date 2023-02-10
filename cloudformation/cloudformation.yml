@@ -33,6 +33,14 @@ Resources:
       ScaleDownBehavior: TERMINATE_AT_TASK_COMPLETION
       JobFlowRole: !GetAtt IAMRole.Arn
       ServiceRole: !GetAtt IAMRole.Arn
+      Instances:
+        InstanceGroups:
+        - Name: "Master"
+          InstanceCount: 1
+          InstanceType: "m4.large"
+        - Name: "Core"
+          InstanceCount: 2
+          InstanceType: "m4.large"
       Steps:
         - Name: "Run custom script"
           ActionOnFailure: CONTINUE
@@ -46,4 +54,3 @@ Outputs:
     Value: !Ref EMRCluster
     Export:
       Name: EMRClusterId
-      
