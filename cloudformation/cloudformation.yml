@@ -45,7 +45,6 @@ Resources:
           TargetOnDemandCapacity: 2
           InstanceTypeConfigs:
           - InstanceType: "m4.large"
-      Ec2KeyName: myKeyPair
       Steps:
         - Name: "Run custom script"
           ActionOnFailure: CONTINUE
