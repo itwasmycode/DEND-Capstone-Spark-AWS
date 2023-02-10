@@ -46,7 +46,6 @@ Resources:
           InstanceTypeConfigs:
           - InstanceType: "m4.large"
       Ec2KeyName: myKeyPair
-      KeepJobFlowAliveWhenNoSteps: false
       Steps:
         - Name: "Run custom script"
           ActionOnFailure: CONTINUE
