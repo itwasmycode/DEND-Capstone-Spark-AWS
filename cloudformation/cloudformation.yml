@@ -35,18 +35,18 @@ Resources:
       ServiceRole: !GetAtt IAMRole.Arn
       Instances:
         InstanceFleets:
-          Name: "Master"
-            InstanceFleetType: MASTER
-            TargetOnDemandCapacity: 1
-            InstanceTypeConfigs:
-            InstanceType: "m4.large"
-          Name: "Core"
-            InstanceFleetType: CORE
-            TargetOnDemandCapacity: 2
-            InstanceTypeConfigs:
-            InstanceType: "m4.large"
-            Ec2KeyName: myKeyPair
-            KeepJobFlowAliveWhenNoSteps: false
+        - Name: "Master"
+          InstanceFleetType: MASTER
+          TargetOnDemandCapacity: 1
+          InstanceTypeConfigs:
+          - InstanceType: "m4.large"
+        - Name: "Core"
+          InstanceFleetType: CORE
+          TargetOnDemandCapacity: 2
+          InstanceTypeConfigs:
+          - InstanceType: "m4.large"
+      Ec2KeyName: myKeyPair
+      KeepJobFlowAliveWhenNoSteps: false
       Steps:
         - Name: "Run custom script"
           ActionOnFailure: CONTINUE
