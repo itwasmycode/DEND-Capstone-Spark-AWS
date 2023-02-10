@@ -33,18 +33,23 @@ Resources:
       ScaleDownBehavior: TERMINATE_AT_TASK_COMPLETION
       JobFlowRole: !GetAtt IAMRole.Arn
       ServiceRole: !GetAtt IAMRole.Arn
-      Instances:
-        InstanceFleets:
-        - Name: "Master"
-          InstanceFleetType: MASTER
-          TargetOnDemandCapacity: 1
-          InstanceTypeConfigs:
-          - InstanceType: "m4.large"
-        - Name: "Core"
-          InstanceFleetType: CORE
-          TargetOnDemandCapacity: 2
-          InstanceTypeConfigs:
-          - InstanceType: "m4.large"
+      CoreInstanceType:
+        Default: "r4.4xlarge"
+        Description: "Instance type to be used for core instances."
+        Type: "String"
+      MasterInstanceType:
+        Default: "r4.4xlarge"
+        Description: "Instance type to be used for the master instance."
+        Type: "String"
+      LogUri:
+        Default: "s3://mysparkawsbucket/"
+        Description: "Must be a valid S3 URL"
+        Type: "String"
+      NumberOfCoreInstances:
+        Default: 2
+        Description: "Must be a valid number"
+        Type: "Number"
+      
       Steps:
         - Name: "Run custom script"
           ActionOnFailure: CONTINUE
