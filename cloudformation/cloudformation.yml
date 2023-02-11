@@ -33,8 +33,9 @@ Resources:
           InstanceType: "m5.xlarge"
           InstanceCount: 1
         TaskInstanceGroups:
-          - InstanceType: "m5.xlarge"
-            InstanceCount: 1
+         - Name: "Task1"
+           InstanceType: "m5.xlarge"
+           InstanceCount: 1
       JobFlowRole: !GetAtt IAMRole.Arn
       ServiceRole: !GetAtt IAMRole.Arn
       Name: "MyEMRCluster"
