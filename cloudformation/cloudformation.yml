@@ -1,27 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Resources:
-  ExampleInstanceProfile:
-    Type: AWS::IAM::InstanceProfile
-    Properties:
-      InstanceProfileName: ExampleInstanceProfile
-      Roles:
-        - !Ref ExampleInstanceRole
-
-  ExampleInstanceRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - ec2.amazonaws.com
-            Action:
-              - 'sts:AssumeRole'
-      Path: /
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AmazonElasticMapReduceFullAccess
   EMRCluster:
     Type: AWS::EMR::Cluster
     Properties:
@@ -36,8 +14,8 @@ Resources:
          - Name: "Task1"
            InstanceType: "m5.xlarge"
            InstanceCount: 1
-      JobFlowRole: !GetAtt ExampleInstanceProfile.Arn
-      ServiceRole: !GetAtt ExampleInstanceProfile.Arn
+      JobFlowRole: EMR_DefaultRole
+      ServiceRole: EMR_EC2_DefaultRole
       Name: "MyEMRCluster"
       ReleaseLabel: "emr-6.2.0"
       Applications:
