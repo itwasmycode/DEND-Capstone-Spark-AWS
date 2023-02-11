@@ -14,8 +14,8 @@ Resources:
          - Name: "Task1"
            InstanceType: "m5.xlarge"
            InstanceCount: 1
-      JobFlowRole: arn:aws:iam::740062030037:role/EMR_DefaultRole
-      ServiceRole: arn:aws:iam::740062030037:role/EMR_EC2_DefaultRole
+      JobFlowRole: "arn:aws:iam::740062030037:role/EMR_DefaultRole"
+      ServiceRole: "arn:aws:iam::740062030037:role/EMR_EC2_DefaultRole"
       Name: "MyEMRCluster"
       ReleaseLabel: "emr-6.2.0"
       Applications:
