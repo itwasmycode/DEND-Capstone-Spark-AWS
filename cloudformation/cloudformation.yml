@@ -26,17 +26,13 @@ Resources:
     Type: AWS::EMR::Cluster
     Properties:
       Instances:
-        InstanceGroups:
-        - Name: "Primary"
-          InstanceRole: "MASTER"
+        CoreInstanceGroup:
           InstanceType: "m5.xlarge"
           InstanceCount: 1
-        - Name: "Core"
-          InstanceRole: "CORE"
+        MasterInstanceGroup:
           InstanceType: "m5.xlarge"
           InstanceCount: 1
-        - Name: "Task"
-          InstanceRole: "TASK"
+        TaskInstanceGroups:
           InstanceType: "m5.xlarge"
           InstanceCount: 1
       JobFlowRole: !GetAtt IAMRole.Arn
