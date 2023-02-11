@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: "2010-09-09"
+AWSTemplateFormatVersion: '2010-09-09'
 Resources:
   IAMRole:
     Type: AWS::IAM::Role
@@ -22,34 +22,32 @@ Resources:
             - '*'
             Effect: Allow
             Resource: '*'
-            
   EMRCluster:
-    Type: "AWS::EMR::Cluster"
+    Type: AWS::EMR::Cluster
     Properties:
-      Name: "EMR Serverless Cluster"
-      ReleaseLabel: "emr-6.2.0"
-      Applications:
-        - Name: "Hadoop"
-      ScaleDownBehavior: TERMINATE_AT_TASK_COMPLETION
+      Instances:
+        InstanceGroups:
+        - Name: "Primary"
+          InstanceRole: "MASTER"
+          InstanceType: "m5.xlarge"
+          InstanceCount: 1
+        - Name: "Core"
+          InstanceRole: "CORE"
+          InstanceType: "m5.xlarge"
+          InstanceCount: 1
+        - Name: "Task"
+          InstanceRole: "TASK"
+          InstanceType: "m5.xlarge"
+          InstanceCount: 1
       JobFlowRole: !GetAtt IAMRole.Arn
       ServiceRole: !GetAtt IAMRole.Arn
-      CoreInstanceType:
-        Default: "r4.4xlarge"
-        Description: "Instance type to be used for core instances."
-        Type: "String"
-      MasterInstanceType:
-        Default: "r4.4xlarge"
-        Description: "Instance type to be used for the master instance."
-        Type: "String"
-      LogUri:
-        Default: "s3://mysparkawsbucket/"
-        Description: "Must be a valid S3 URL"
-        Type: "String"
-      NumberOfCoreInstances:
-        Default: 2
-        Description: "Must be a valid number"
-        Type: "Number"
-      
+      Name: "MyEMRCluster"
+      ReleaseLabel: "emr-6.2.0"
+      Applications:
+        - Name: "Spark"
+      Configurations: []
+      VisibleToAllUsers: true
+      BootstrapActions: []
       Steps:
         - Name: "Run custom script"
           ActionOnFailure: CONTINUE
@@ -58,8 +56,3 @@ Resources:
             Args:
               - "spark-submit"
               - "s3://mysparkawsbucket/spark-app.py"
-Outputs:
-  EMRClusterId:
-    Value: !Ref EMRCluster
-    Export:
-      Name: EMRClusterId
