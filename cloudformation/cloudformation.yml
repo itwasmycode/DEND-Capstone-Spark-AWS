@@ -4,7 +4,7 @@ Resources:
     Type: 'AWS::Glue::Table'
     Properties:
       DatabaseName: mydatabase
-      CatalogId: !Ref AWS::740062030037
+      CatalogId: 740062030037
       TableInput:
         Name: vendor
         StorageDescriptor:
@@ -27,7 +27,7 @@ Resources:
     Type: 'AWS::Glue::Table'
     Properties:
       DatabaseName: mydatabase
-      CatalogId: !Ref AWS::740062030037
+      CatalogId: 740062030037
       TableInput:
         Name: store
         StorageDescriptor:
@@ -55,7 +55,7 @@ Resources:
     Type: 'AWS::Glue::Table'
     Properties:
       DatabaseName: mydatabase
-      CatalogId: !Ref AWS::740062030037
+      CatalogId: 740062030037
       TableInput:
         Name: item
         StorageDescriptor:
@@ -84,7 +84,7 @@ Resources:
     Type: 'AWS::Glue::Table'
     Properties:
       DatabaseName: mydatabase
-      CatalogId: !Ref AWS::740062030037
+      CatalogId: 740062030037
       TableInput:
         Name: city
         StorageDescriptor:
@@ -107,7 +107,7 @@ Resources:
     Type: 'AWS::Glue::Table'
     Properties:
       DatabaseName: mydatabase
-      CatalogId: !Ref AWS::740062030037
+      CatalogId: 740062030037
       TableInput:
         Name: category
         StorageDescriptor:
@@ -129,7 +129,7 @@ Resources:
     Type: 'AWS::Glue::Table'
     Properties:
       DatabaseName: mydatabase
-      CatalogId: !Ref AWS::740062030037
+      CatalogId: 740062030037
       TableInput:
         Name: time
         StorageDescriptor:
