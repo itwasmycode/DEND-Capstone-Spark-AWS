@@ -139,29 +139,6 @@ Resources:
       DatabaseName: mydatabase
       CatalogId: AWSDataCatalog
       TableInput:
-        Name: vendor
-        StorageDescriptor:
-          Columns:
-            - Name: vendor_number
-              Type: int
-              Comment: The unique identifier of the vendor
-            - Name: vendor_name
-              Type: string
-              Comment: The vendor name
-          Location: s3://sparkcapstonebucket/test_key/city_table.parquet/
-          InputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat
-          OutputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat
-          SerdeInfo:
-            SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
-          Parameters:
-            'compression': 'SNAPPY'
-
-  AthenaTable7:
-    Type: 'AWS::Glue::Table'
-    Properties:
-      DatabaseName: mydatabase
-      CatalogId: AWSDataCatalog
-      TableInput:
         Name: time
         StorageDescriptor:
           Columns:
