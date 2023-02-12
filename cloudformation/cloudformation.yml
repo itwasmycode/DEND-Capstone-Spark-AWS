@@ -1,15 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Resources:
-  AthenaDatabase:
-    Type: 'AWS::Glue::Database'
-    Properties:
-      CatalogId: AWSDataCatalog
-      DatabaseInput:
-        Name: mydatabase
-        Description: My Athena database
-        CreateTableDefaultPermissions:
-          - Permissions: ["*"]
-
   AthenaTable1:
     Type: 'AWS::Glue::Table'
     Properties:
