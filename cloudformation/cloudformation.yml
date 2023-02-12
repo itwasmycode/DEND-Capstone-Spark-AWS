@@ -8,8 +8,7 @@ Resources:
         Name: mydatabase
         Description: My Athena database
         CreateTableDefaultPermissions:
-          - Principal: "*"
-            Actions: [ "ALL" ]
+          - Permissions: ["*"]
 
   AthenaTable1:
     Type: 'AWS::Glue::Table'
