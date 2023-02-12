@@ -10,7 +10,7 @@ Resources:
   AthenaTable1:
     Type: 'AWS::Glue::Table'
     Properties:
-      DatabaseName: !GetAtt AthenaDatabase.Name
+      DatabaseName: !GetAtt AthenaDatabase
       CatalogId: '740062030037'
       TableInput:
         Name: vendor
@@ -33,7 +33,7 @@ Resources:
   AthenaTable2:
     Type: 'AWS::Glue::Table'
     Properties:
-      DatabaseName: !GetAtt AthenaDatabase.Name
+      DatabaseName: !GetAtt AthenaDatabase
       CatalogId: '740062030037'
       TableInput:
         Name: store
@@ -61,7 +61,7 @@ Resources:
   AthenaTable3:
     Type: 'AWS::Glue::Table'
     Properties:
-      DatabaseName: !GetAtt AthenaDatabase.Name
+      DatabaseName: !GetAtt AthenaDatabase
       CatalogId: '740062030037'
       TableInput:
         Name: item
@@ -90,7 +90,7 @@ Resources:
   AthenaTable4:
     Type: 'AWS::Glue::Table'
     Properties:
-      DatabaseName: !GetAtt AthenaDatabase.Name
+      DatabaseName: !GetAtt AthenaDatabase
       CatalogId: '740062030037'
       TableInput:
         Name: city
@@ -113,7 +113,7 @@ Resources:
   AthenaTable5:
     Type: 'AWS::Glue::Table'
     Properties:
-      DatabaseName: !GetAtt AthenaDatabase.Name
+      DatabaseName: !GetAtt AthenaDatabase
       CatalogId: '740062030037'
       TableInput:
         Name: category
@@ -135,7 +135,7 @@ Resources:
   AthenaTable6:
     Type: 'AWS::Glue::Table'
     Properties:
-      DatabaseName: !GetAtt AthenaDatabase.Name
+      DatabaseName: !GetAtt AthenaDatabase
       CatalogId: '740062030037'
       TableInput:
         Name: time
