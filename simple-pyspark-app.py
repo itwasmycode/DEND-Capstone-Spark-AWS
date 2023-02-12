@@ -14,7 +14,10 @@ import logging
 
 def create_spark_session():
     """
-    Creates Spark session using configs in-place rather than taking params from outside
+    Creates a Spark session using pre-defined configuration.
+
+    Returns:
+        SparkSession: The created Spark session.
     """
     logging.warning(f"Trying to get configuration.")
     spark = (
@@ -32,28 +35,40 @@ def create_spark_session():
 
 def process_dim_data(
     ss: pyspark.sql.session.SparkSession, s3_bucket: str, s3_key: str, output: str
-) -> None:
+    ) -> None:
+    """
+       Processes the dimension data and writes the results to S3.
+
+       Args:
+           ss (SparkSession): The Spark session.
+           s3_bucket (str): The S3 bucket name.
+           s3_key (str): The S3 key name.
+           output (str): The output file name.
+
+       Returns:
+           None: The function does not return anything.
+    """
     data_location = f"s3a://{s3_bucket}/Iowa_Liquor_Sales.csv"
     logging.warning(f"Data location is {data_location}.")
     logging.warning(f"Trying to get dimension lookups")
 
     df = ss.read.option("header", True).option("inferSchema","true").csv(data_location)
     df = df \
-        .withColumnRenamed("Store Number","store_number") \
-        .withColumnRenamed("Store Name","store_name") \
-        .withColumnRenamed("Address","address") \
-        .withColumnRenamed("Store Location","store_location") \
-        .withColumnRenamed("Item Number","item_number") \
-        .withColumnRenamed("Item Description","item_description") \
-        .withColumnRenamed("State Bottle Cost","state_bottle_cost") \
-        .withColumnRenamed("State Bottle Retail","state_bottle_retail") \
-        .withColumnRenamed("Vendor Number","vendor_number") \
-        .withColumnRenamed("Vendor Name","vendor_name") \
-        .withColumnRenamed("Zip Code","zip_code") \
-        .withColumnRenamed("City","city") \
-        .withColumnRenamed("Category","category") \
-        .withColumnRenamed("Category Name","category_name") \
-        .withColumnRenamed("Date","date")
+        .withColumnRenamed("Store Number", "store_number") \
+        .withColumnRenamed("Store Name", "store_name") \
+        .withColumnRenamed("Address", "address") \
+        .withColumnRenamed("Store Location", "store_location") \
+        .withColumnRenamed("Item Number", "item_number") \
+        .withColumnRenamed("Item Description", "item_description") \
+        .withColumnRenamed("State Bottle Cost", "state_bottle_cost") \
+        .withColumnRenamed("State Bottle Retail", "state_bottle_retail") \
+        .withColumnRenamed("Vendor Number", "vendor_number") \
+        .withColumnRenamed("Vendor Name", "vendor_name") \
+        .withColumnRenamed("Zip Code", "zip_code") \
+        .withColumnRenamed("City", "city") \
+        .withColumnRenamed("Category", "category") \
+        .withColumnRenamed("Category Name", "category_name") \
+        .withColumnRenamed("Date", "date")
 
     dimension_lookup = {
         "Store": ["store_number", "store_name", "address", "store_location"],
@@ -75,8 +90,9 @@ def process_dim_data(
         logging.warning(f"Length of dimension {key} is : {inner_df.count()}")
         logging.warning(f"Schema is : \n{inner_df.printSchema()}")
         inner_df.write.parquet(f"s3a://{s3_bucket}/{s3_key}/{part_key}", mode="overwrite")
-		
+
     logging.warning(f"Trying to extract time dimension")
+
     # Extract time dimension
     time_dim = (
         df.withColumn("date_ex", to_date("date", "MM/dd/yyyy"))
