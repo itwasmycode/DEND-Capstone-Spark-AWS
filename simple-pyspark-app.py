@@ -102,13 +102,13 @@ def process_dim_data(
         .withColumn("quarter", quarter("date_ex"))
         .withColumn("weekofyear", weekofyear("date_ex"))
         .dropDuplicates(["date_ex", "weekend", "year", "month", "quarter"])
-        .select(["date", "date_ex", "weekend", "year", "month", "quarter"])
+        .select(["date_ex", "weekend", "year", "month", "quarter"])
     )
     logging.warning(f"Length of time_dimension is {time_dim .count()}")
     logging.warning(f"Schema is : \n{time_dim.printSchema()}")
-    time_dim.write.parquet(f"s3a://{s3_bucket}/{output}",mode='overwrite')
+    time_dim.write.parquet(f"s3a://{s3_bucket}/{s3_key}/{output}",mode='overwrite')
 
 
 if __name__ == "__main__":
     session = create_spark_session()
-    process_dim_data(session, "sparkcapstonebucket", "test_key", "time.parquet")
+    process_dim_data(session, "sparkcapstonebucket", "test_key", "time_table.parquet")

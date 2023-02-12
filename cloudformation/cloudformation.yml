@@ -1,5 +1,193 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Resources:
+  AthenaDatabase:
+    Type: 'AWS::Glue::Database'
+    Properties:
+      CatalogId: AWSDataCatalog
+      DatabaseInput:
+        Name: mydatabase
+        Description: My Athena database
+
+  AthenaTable1:
+    Type: 'AWS::Glue::Table'
+    Properties:
+      DatabaseName: mydatabase
+      CatalogId: AWSDataCatalog
+      TableInput:
+        Name: vendor
+        StorageDescriptor:
+          Columns:
+            - Name: vendor_number
+              Type: string
+              Comment: The number of the vendor
+            - Name: vendor_name
+              Type: string
+              Comment: The name of the vendor
+          Location: s3://mybucket/parquet/vendor/
+          InputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat
+          OutputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat
+          SerdeInfo:
+            SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
+          Parameters:
+            'compression': 'SNAPPY'
+
+  AthenaTable2:
+    Type: 'AWS::Glue::Table'
+    Properties:
+      DatabaseName: mydatabase
+      CatalogId: AWSDataCatalog
+      TableInput:
+        Name: store
+        StorageDescriptor:
+          Columns:
+            - Name: store_number
+              Type: int
+              Comment: The unique identifier of the store
+            - Name: store_name
+              Type: string
+              Comment: The name of the store
+            - Name: address
+              Type: string
+              Comment: The address of the store
+            - Name: store_location
+              Type: string
+              Comment: The location of the store
+          Location: s3://sparkcapstonebucket/test_key/store_table.parquet/
+          InputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat
+          OutputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat
+          SerdeInfo:
+            SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
+          Parameters:
+            'compression': 'SNAPPY'
+  AthenaTable3:
+    Type: 'AWS::Glue::Table'
+    Properties:
+      DatabaseName: mydatabase
+      CatalogId: AWSDataCatalog
+      TableInput:
+        Name: item
+        StorageDescriptor:
+          Columns:
+            - Name: item_number
+              Type: int
+              Comment: The unique identifier of the item
+            - Name: item_description
+              Type: string
+              Comment: The description of the item
+            - Name: state_bottle_cost
+              Type: string
+              Comment: Cost of a bottle item
+            - Name: state_bottle_retail
+              Type: string
+              Comment: Retail of the bottle item
+          Location: s3://sparkcapstonebucket/test_key/item_table.parquet/
+          InputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat
+          OutputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat
+          SerdeInfo:
+            SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
+          Parameters:
+            'compression': 'SNAPPY'
+
+  AthenaTable4:
+    Type: 'AWS::Glue::Table'
+    Properties:
+      DatabaseName: mydatabase
+      CatalogId: AWSDataCatalog
+      TableInput:
+        Name: city
+        StorageDescriptor:
+          Columns:
+            - Name: zip_code
+              Type: int
+              Comment: The unique identifier of the city
+            - Name: city
+              Type: string
+              Comment: The city name
+          Location: s3://sparkcapstonebucket/test_key/city_table.parquet/
+          InputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat
+          OutputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat
+          SerdeInfo:
+            SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
+          Parameters:
+            'compression': 'SNAPPY'
+
+  AthenaTable5:
+    Type: 'AWS::Glue::Table'
+    Properties:
+      DatabaseName: mydatabase
+      CatalogId: AWSDataCatalog
+      TableInput:
+        Name: category
+        StorageDescriptor:
+          Columns:
+            - Name: category
+              Type: int
+              Comment: The unique identifier of the category
+            - Name: category_name
+              Type: string
+              Comment: The category name
+          Location: s3://sparkcapstonebucket/test_key/city_table.parquet/
+          InputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat
+          OutputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat
+          SerdeInfo:
+            SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
+          Parameters:
+            'compression': 'SNAPPY'
+  AthenaTable6:
+    Type: 'AWS::Glue::Table'
+    Properties:
+      DatabaseName: mydatabase
+      CatalogId: AWSDataCatalog
+      TableInput:
+        Name: vendor
+        StorageDescriptor:
+          Columns:
+            - Name: vendor_number
+              Type: int
+              Comment: The unique identifier of the vendor
+            - Name: vendor_name
+              Type: string
+              Comment: The vendor name
+          Location: s3://sparkcapstonebucket/test_key/city_table.parquet/
+          InputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat
+          OutputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat
+          SerdeInfo:
+            SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
+          Parameters:
+            'compression': 'SNAPPY'
+
+  AthenaTable7:
+    Type: 'AWS::Glue::Table'
+    Properties:
+      DatabaseName: mydatabase
+      CatalogId: AWSDataCatalog
+      TableInput:
+        Name: time
+        StorageDescriptor:
+          Columns:
+            - Name: date_ex
+              Type: int
+              Comment: The unique identifier of the date
+            - Name: weekend
+              Type: int
+              Comment: Weekend or not
+            - Name: year
+              Type: int
+              Comment: Year of the date
+            - Name: month
+              Type: int
+              Comment: Month of the date
+            - Name: quarter
+              Type: int
+              Comment: Quarter of the date
+          Location: s3://sparkcapstonebucket/test_key/time_table.parquet/
+          InputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat
+          OutputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat
+          SerdeInfo:
+            SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
+          Parameters:
+            'compression': 'SNAPPY'
+
   EMRCluster:
     Type: AWS::EMR::Cluster
     Properties:
