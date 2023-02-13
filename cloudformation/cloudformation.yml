@@ -22,14 +22,14 @@ Resources:
             - Name: vendor_name
               Type: string
               Comment: The name of the vendor
-          Location: s3://mybucket/parquet/vendor/
+          Location: s3://sparkcapstonebucket/test_key/vendor_table.parquet/
           InputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat
           OutputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat
           SerdeInfo:
             SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
           Parameters:
             'compression': 'SNAPPY'
-
+        TableType: EXTERNAL_TABLE
   AthenaTable2:
     Type: 'AWS::Glue::Table'
     Properties:
@@ -58,6 +58,7 @@ Resources:
             SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
           Parameters:
             'compression': 'SNAPPY'
+        TableType: EXTERNAL_TABLE
   AthenaTable3:
     Type: 'AWS::Glue::Table'
     Properties:
@@ -86,7 +87,7 @@ Resources:
             SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
           Parameters:
             'compression': 'SNAPPY'
-
+        TableType: EXTERNAL_TABLE
   AthenaTable4:
     Type: 'AWS::Glue::Table'
     Properties:
@@ -109,7 +110,7 @@ Resources:
             SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
           Parameters:
             'compression': 'SNAPPY'
-
+        TableType: EXTERNAL_TABLE
   AthenaTable5:
     Type: 'AWS::Glue::Table'
     Properties:
@@ -132,6 +133,7 @@ Resources:
             SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
           Parameters:
             'compression': 'SNAPPY'
+        TableType: EXTERNAL_TABLE
   AthenaTable6:
     Type: 'AWS::Glue::Table'
     Properties:
@@ -163,6 +165,7 @@ Resources:
             SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
           Parameters:
             'compression': 'SNAPPY'
+        TableType: EXTERNAL_TABLE
 
   EMRCluster:
     Type: AWS::EMR::Cluster
@@ -184,8 +187,20 @@ Resources:
       ReleaseLabel: "emr-6.2.0"
       Applications:
         - Name: "Spark"
-      Configurations: []
+      Configurations:
+        - Classification: capacity-scheduler
+          ConfigurationProperties:
+            yarn.scheduler.capacity.root.default.maximum-capacity: 100
+            yarn.scheduler.capacity.root.default.capacity: 100
+      ManagedScalingPolicy:
+        ComputeLimits:
+          MaximumCapacityUnits: 20
+          MinimumCapacityUnits: 2
+          MaximumCoreCapacityUnits: 20
+          MaximumOnDemandCapacityUnits: 20
+          UnitType: Instances
       VisibleToAllUsers: true
+      LogUri : s3://mysparkawsbucket/
       BootstrapActions: []
       Steps:
         - Name: "Run custom script"
