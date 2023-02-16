@@ -98,7 +98,9 @@ def process_dim_data(
     for key, val in dimension_lookup.items():
         part_key = key.lower() + "_table"+".parquet"
         logging.warning(f"Current dimension is {key}.")
-        inner_df = df.drop_duplicates(val[0]).select(val)
+        primary_key = val[0]
+        logging.warning(f"primary key{primary_key}")
+        inner_df = df.drop_duplicates([primary_key]).select(val)
         logging.warning(f"Length of dimension {key} is : {inner_df.count()}")
         logging.warning(f"Schema is : \n{inner_df.printSchema()}")
         inner_df.head()
