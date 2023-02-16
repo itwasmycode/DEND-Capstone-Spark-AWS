@@ -103,7 +103,7 @@ def process_dim_data(
         inner_df = df.drop_duplicates([primary_key]).select(val)
         logging.warning(f"Length of dimension {key} is : {inner_df.count()}")
         logging.warning(f"Schema is : \n{inner_df.printSchema()}")
-        inner_df.write.parquet(f"s3a://{s3_bucket}/{s3_key}/{part_key}")
+        inner_df.write.parquet(f"s3a://{s3_bucket}/{s3_key}/{part_key}").mode("overwrite")
 
     logging.warning(f"Trying to extract time dimension")
 
@@ -120,7 +120,7 @@ def process_dim_data(
     )
     logging.warning(f"Length of time_dimension is {time_dim .count()}")
     logging.warning(f"Schema is : \n{time_dim.printSchema()}")
-    time_dim.write.parquet(f"s3a://{s3_bucket}/{s3_key}/{output}")
+    time_dim.write.parquet(f"s3a://{s3_bucket}/{s3_key}/{output}").mode("overwrite")
 
 
 if __name__ == "__main__":
