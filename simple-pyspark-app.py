@@ -9,6 +9,8 @@ from pyspark.sql.functions import (
     month,
     weekofyear,
 )
+from pyspark.sql.types import FloatType,StringType, IntegerType, StructField, StructType
+
 import logging
 
 
@@ -52,41 +54,51 @@ def process_dim_data(
     logging.warning(f"Data location is {data_location}.")
     logging.warning(f"Trying to get dimension lookups")
 
-    df = ss.read.option("header", True).option("inferSchema","true").csv(data_location)
-    df = df \
-        .withColumnRenamed("Store Number", "store_number") \
-        .withColumnRenamed("Store Name", "store_name") \
-        .withColumnRenamed("Address", "address") \
-        .withColumnRenamed("Store Location", "store_location") \
-        .withColumnRenamed("Item Number", "item_number") \
-        .withColumnRenamed("Item Description", "item_description") \
-        .withColumnRenamed("State Bottle Cost", "state_bottle_cost") \
-        .withColumnRenamed("State Bottle Retail", "state_bottle_retail") \
-        .withColumnRenamed("Vendor Number", "vendor_number") \
-        .withColumnRenamed("Vendor Name", "vendor_name") \
-        .withColumnRenamed("Zip Code", "zip_code") \
-        .withColumnRenamed("City", "city") \
-        .withColumnRenamed("Category", "category") \
-        .withColumnRenamed("Category Name", "category_name") \
-        .withColumnRenamed("Date", "date")
+    schema = StructType([StructField("invoice_number", StringType(), True),
+                     StructField("date", StringType(), False),
+                     StructField("store_number", IntegerType(), False),
+                     StructField("store_name", StringType(), False),
+                     StructField("address", StringType(), False),
+                     StructField("city", StringType(), False),
+                     StructField("zip_code", StringType(), False),
+                     StructField("store_location", StringType(), False),
+                     StructField("county_number", IntegerType(), False),
+                     StructField("county", StringType(), False),
+                     StructField("category", IntegerType(), False),
+                     StructField("category_name", StringType(), False),
+                     StructField("vendor_number", IntegerType(), False),
+                     StructField("vendor_name", StringType(), False),
+                     StructField("item_number", IntegerType(), False),
+                     StructField("item_description", StringType(), False),
+                     StructField("pack", IntegerType(), False),
+                     StructField("bottle_volume", StringType(), False),
+                     StructField("state_bottle_cost", StringType(), False),
+                     StructField("state_bottle_retail", StringType(), False),
+                     StructField("bottles_sold", IntegerType(), False),
+                     StructField("sale", StringType(), False),
+                     StructField("volume_sold_liters", FloatType(), False),
+                     StructField("volume_sold_gallons", FloatType(), False)])
+
+    df = ss.read.option("header", True).option("inferSchema","true").csv(data_location,schema=schema)
+
+    df = df.withColumn("date_ex", to_date("date", "MM/dd/yyyy"))
 
     dimension_lookup = {
         "Store": ["store_number", "store_name", "address", "store_location"],
         "Item": [
             "item_number",
-            "item_description",
-            "state_bottle_cost",
-            "state_bottle_retail",
+            "item_description"
         ],
         "Vendor": ["vendor_number", "vendor_name"],
         "City": ["zip_code", "city"],
         "Category": ["category", "category_name"],
+        "Item_Price": ["item_number","date","state_bottle_cost","state_bottle_retail"]
     }
 
     for key, val in dimension_lookup.items():
         part_key = key.lower() + "_table"+".parquet"
         logging.warning(f"Current dimension is {key}.")
-        inner_df = df.drop_duplicates(val).select(*val)
+        inner_df = df.drop_duplicates(val).select(val)
         logging.warning(f"Length of dimension {key} is : {inner_df.count()}")
         logging.warning(f"Schema is : \n{inner_df.printSchema()}")
         inner_df.write.parquet(f"s3a://{s3_bucket}/{s3_key}/{part_key}", mode="overwrite")
@@ -95,7 +107,7 @@ def process_dim_data(
 
     # Extract time dimension
     time_dim = (
-        df.withColumn("date_ex", to_date("date", "MM/dd/yyyy"))
+        df \
         .withColumn("weekend", dayofweek("date_ex").isin([1, 7]).cast("int"))
         .withColumn("year", year("date_ex"))
         .withColumn("month", month("date_ex"))
