@@ -213,7 +213,7 @@ Resources:
               Type: string
               Comment: The date of the item
             - Name: store_number
-              Type: string
+              Type: int
               Comment: Store Number
             - Name: zip_code
               Type: string
@@ -222,10 +222,10 @@ Resources:
               Type: string
               Comment: The unique identifier of the country
             - Name: vendor_number
-              Type: string
+              Type: int
               Comment: Vendor Number
             - Name: item_number
-              Type: string
+              Type: int
               Comment: Identifier of item
             - Name: bottles_sold
               Type: string
