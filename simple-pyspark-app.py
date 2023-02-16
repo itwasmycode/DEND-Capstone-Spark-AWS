@@ -53,7 +53,8 @@ def process_dim_data(
     data_location = f"s3a://{s3_bucket}/Iowa_Liquor_Sales.csv"
     logging.warning(f"Data location is {data_location}.")
     logging.warning(f"Trying to get dimension lookups")
-
+    fact_table = ["invoice_number","date","store_number","zip_code","county_number",
+    "vendor_number","item_number","bottles_sold","sale","volume_sold_liters"]
     schema = StructType([StructField("invoice_number", StringType(), True),
                      StructField("date", StringType(), False),
                      StructField("store_number", IntegerType(), False),
@@ -98,10 +99,14 @@ def process_dim_data(
     for key, val in dimension_lookup.items():
         part_key = key.lower() + "_table"+".parquet"
         logging.warning(f"Current dimension is {key}.")
-        primary_key = val[0]
-        logging.warning(f"primary key{primary_key}")
-        inner_df = df.drop_duplicates([primary_key]).select(val)
-        logging.warning(f"Length of dimension {key} is : {inner_df.count()}")
+        if key != "Item_Price":
+            primary_key = val[0]
+            logging.warning(f"primary key{primary_key}")
+            inner_df = df.drop_duplicates([primary_key]).select(val)
+            logging.warning(f"Length of dimension {key} is : {inner_df.count()}")
+        else:
+            inner_df = df.drop_duplicates(val).select(val)
+            logging.warning(f"Length of dimension {key} is : {inner_df.count()}")
         logging.warning(f"Schema is : \n{inner_df.printSchema()}")
         inner_df.write.parquet(f"s3a://{s3_bucket}/{s3_key}/{part_key}",mode='overwrite')
         
@@ -118,10 +123,13 @@ def process_dim_data(
         .dropDuplicates(["date_ex", "weekend", "year", "month", "quarter"])
         .select(["date_ex", "weekend", "year", "month", "quarter"])
     )
+    
     logging.warning(f"Length of time_dimension is {time_dim.count()}")
     logging.warning(f"Schema is : \n{time_dim.printSchema()}")
     time_dim.write.parquet(f"s3a://{s3_bucket}/{s3_key}/{output}",mode='overwrite')
 
+    order_fact = df.select(fact_table)
+    order_fact.write.parquet(f"s3a://{s3_bucket}/{s3_key}/order_fact.parquet",mode='overwrite')
 
 if __name__ == "__main__":
     session = create_spark_session()

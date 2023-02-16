@@ -128,7 +128,7 @@ Resources:
             - Name: category_name
               Type: string
               Comment: The category name
-          Location: s3://sparkcapstonebucket/test_key/city_table.parquet/
+          Location: s3://sparkcapstonebucket/test_key/category_table.parquet/
           InputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat
           OutputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat
           SerdeInfo:
@@ -174,7 +174,7 @@ Resources:
       DatabaseName: !Ref AthenaDatabase
       CatalogId: '740062030037'
       TableInput:
-        Name: itemprice
+        Name: item_price
         StorageDescriptor:
           Columns:
             - Name: item_number
@@ -189,13 +189,60 @@ Resources:
             - Name: state_bottle_retail
               Type: string
               Comment: Retail of the bottle item
-          Location: s3://sparkcapstonebucket/test_key/itemprice.parquet/
+          Location: s3://sparkcapstonebucket/test_key/item_price_table.parquet/
           InputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat
           OutputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat
           SerdeInfo:
             SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
           Parameters:
             'compression': 'SNAPPY'   
+
+  AthenaTable8:
+    Type: 'AWS::Glue::Table'
+    Properties:
+      DatabaseName: !Ref AthenaDatabase
+      CatalogId: '740062030037'
+      TableInput:
+        Name: orders
+        StorageDescriptor:
+          Columns:
+            - Name: invoice_number
+              Type: string
+              Comment: The unique identifier of the invoice
+            - Name: date
+              Type: string
+              Comment: The date of the item
+            - Name: store_number
+              Type: string
+              Comment: Store Number
+            - Name: zip_code
+              Type: string
+              Comment: Zip code of City
+            - Name: country_number
+              Type: string
+              Comment: The unique identifier of the country
+            - Name: vendor_number
+              Type: string
+              Comment: Vendor Number
+            - Name: item_number
+              Type: string
+              Comment: Identifier of item
+            - Name: bottles_sold
+              Type: string
+              Comment: How many bottle sold in one transaction
+            - Name: sale
+              Type: string
+              Comment: How much a sale total
+            - Name: volume_sold_liters
+              Type: string
+              Comment: How much volume sold in ml
+          Location: s3://sparkcapstonebucket/test_key/order_fact.parquet/
+          InputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat
+          OutputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat
+          SerdeInfo:
+            SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
+          Parameters:
+            'compression': 'SNAPPY'  
 
   EMRCluster:
     Type: AWS::EMR::Cluster
