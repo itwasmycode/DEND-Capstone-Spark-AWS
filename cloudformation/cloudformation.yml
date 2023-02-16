@@ -228,7 +228,7 @@ Resources:
               Type: int
               Comment: Identifier of item
             - Name: bottles_sold
-              Type: string
+              Type: int
               Comment: How many bottle sold in one transaction
             - Name: sale
               Type: string
