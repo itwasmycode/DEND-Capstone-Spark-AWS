@@ -7,6 +7,7 @@ Resources:
       DatabaseInput:
         Name: mydatabase
         Description: My Athena database
+        
   AthenaTable1:
     Type: 'AWS::Glue::Table'
     Properties:
@@ -17,7 +18,7 @@ Resources:
         StorageDescriptor:
           Columns:
             - Name: vendor_number
-              Type: string
+              Type: int
               Comment: The number of the vendor
             - Name: vendor_name
               Type: string
@@ -29,7 +30,7 @@ Resources:
             SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
           Parameters:
             'compression': 'SNAPPY'
-        TableType: EXTERNAL_TABLE
+
   AthenaTable2:
     Type: 'AWS::Glue::Table'
     Properties:
@@ -58,7 +59,7 @@ Resources:
             SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
           Parameters:
             'compression': 'SNAPPY'
-        TableType: EXTERNAL_TABLE
+
   AthenaTable3:
     Type: 'AWS::Glue::Table'
     Properties:
@@ -87,7 +88,7 @@ Resources:
             SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
           Parameters:
             'compression': 'SNAPPY'
-        TableType: EXTERNAL_TABLE
+
   AthenaTable4:
     Type: 'AWS::Glue::Table'
     Properties:
@@ -110,7 +111,8 @@ Resources:
             SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
           Parameters:
             'compression': 'SNAPPY'
-        TableType: EXTERNAL_TABLE
+
+
   AthenaTable5:
     Type: 'AWS::Glue::Table'
     Properties:
@@ -133,7 +135,7 @@ Resources:
             SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
           Parameters:
             'compression': 'SNAPPY'
-        TableType: EXTERNAL_TABLE
+
   AthenaTable6:
     Type: 'AWS::Glue::Table'
     Properties:
@@ -165,7 +167,35 @@ Resources:
             SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
           Parameters:
             'compression': 'SNAPPY'
-        TableType: EXTERNAL_TABLE
+
+  AthenaTable7:
+    Type: 'AWS::Glue::Table'
+    Properties:
+      DatabaseName: !Ref AthenaDatabase
+      CatalogId: '740062030037'
+      TableInput:
+        Name: itemprice
+        StorageDescriptor:
+          Columns:
+            - Name: item_number
+              Type: int
+              Comment: The unique identifier of the item
+            - Name: date
+              Type: string
+              Comment: The description of the item
+            - Name: state_bottle_cost
+              Type: string
+              Comment: Cost of a bottle item
+            - Name: state_bottle_retail
+              Type: string
+              Comment: Retail of the bottle item
+          Location: s3://sparkcapstonebucket/test_key/itemprice.parquet/
+          InputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat
+          OutputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat
+          SerdeInfo:
+            SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
+          Parameters:
+            'compression': 'SNAPPY'   
 
   EMRCluster:
     Type: AWS::EMR::Cluster
