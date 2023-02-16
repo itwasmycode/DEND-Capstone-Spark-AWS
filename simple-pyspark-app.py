@@ -79,7 +79,7 @@ def process_dim_data(
                      StructField("volume_sold_liters", FloatType(), False),
                      StructField("volume_sold_gallons", FloatType(), False)])
 
-    df = ss.read.option("header", True).csv(data_location,schema=schema)
+    df = ss.read.option("header", True).option("multiline","true").csv(data_location,schema=schema)
 
     df = df.withColumn("date_ex", to_date("date", "MM/dd/yyyy"))
 
@@ -103,7 +103,6 @@ def process_dim_data(
         inner_df = df.drop_duplicates([primary_key]).select(val)
         logging.warning(f"Length of dimension {key} is : {inner_df.count()}")
         logging.warning(f"Schema is : \n{inner_df.printSchema()}")
-        inner_df.head()
         inner_df.write.parquet(f"s3a://{s3_bucket}/{s3_key}/{part_key}")
 
     logging.warning(f"Trying to extract time dimension")
