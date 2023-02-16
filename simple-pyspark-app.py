@@ -118,7 +118,7 @@ def process_dim_data(
         .dropDuplicates(["date_ex", "weekend", "year", "month", "quarter"])
         .select(["date_ex", "weekend", "year", "month", "quarter"])
     )
-    logging.warning(f"Length of time_dimension is {time_dim .count()}")
+    logging.warning(f"Length of time_dimension is {time_dim.count()}")
     logging.warning(f"Schema is : \n{time_dim.printSchema()}")
     time_dim.write.parquet(f"s3a://{s3_bucket}/{s3_key}/{output}",mode='overwrite')
 
