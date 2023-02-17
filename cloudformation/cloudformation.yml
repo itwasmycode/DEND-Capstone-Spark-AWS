@@ -234,7 +234,7 @@ Resources:
               Type: string
               Comment: How much a sale total
             - Name: volume_sold_liters
-              Type: string
+              Type: float
               Comment: How much volume sold in ml
           Location: s3://sparkcapstonebucket/test_key/order_fact.parquet/
           InputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat
