@@ -9,7 +9,7 @@ from pyspark.sql.functions import (
     month,
     weekofyear,
 )
-from pyspark.sql.types import FloatType,StringType, IntegerType, StructField, StructType
+from pyspark.sql.types import FloatType, StringType, IntegerType, DoubleType, StructField, StructType
 from pyspark.sql.functions import regexp_replace
 import logging
 
@@ -100,10 +100,19 @@ def process_dim_data(
         part_key = key.lower() + "_table"+".parquet"
         logging.warning(f"Current dimension is {key}.")
         if key != "Item_Price":
+            indicator = "state_bottle_cost" in val or "state_bottle_retail" in val
             primary_key = val[0]
             logging.warning(f"primary key{primary_key}")
             inner_df = df.drop_duplicates([primary_key]).select(val)
-            logging.warning(f"Length of dimension {key} is : {inner_df.count()}")
+            if indicator:
+                inner_df \
+                .withColumn("sale",
+                            regexp_replace('state_bottle_retail', '$', '')) \
+                .withColumn("state_bottle_retail", round(df.sale.cast(DoubleType()),2)) \
+                .withColumn("sale",
+                            regexp_replace('state_bottle_cost', '$', '')) \
+                .withColumn("state_bottle_cost", round(df.sale.cast(DoubleType()),2))                
+            logging.warning(f"Length of dimension {key} is : {inner_df.count()}") 
         else:
             inner_df = df.drop_duplicates(val).select(val)
             logging.warning(f"Length of dimension {key} is : {inner_df.count()}")
@@ -129,10 +138,10 @@ def process_dim_data(
     time_dim.write.parquet(f"s3a://{s3_bucket}/{s3_key}/{output}",mode='overwrite')
 
     order_fact = df.select(fact_table)
-    order_fact.withColumn("state_bottle_cost",
-                        regexp_replace('state_bottle_cost', '$', '')) \
-            .withColumn("state_retail_cost",
-                        regexp_replace('state_retail_cost', '$', ''))
+    order_fact \
+            .withColumn("sale",
+                        regexp_replace('sale', '$', '')) \
+            .withColumn("sale", round(df.sale.cast(DoubleType()),2))
              
     order_fact.write.parquet(f"s3a://{s3_bucket}/{s3_key}/order_fact.parquet",mode='overwrite')
 
