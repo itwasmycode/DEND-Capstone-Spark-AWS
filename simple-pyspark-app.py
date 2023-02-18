@@ -141,7 +141,7 @@ def process_dim_data(
     order_fact \
             .withColumn("sale",
                         regexp_replace('sale', '$', '')) \
-            .withColumn("sale", df.sale.cast(DoubleType()),2)
+            .withColumn("sale", df.sale.cast(DoubleType()))
              
     order_fact.write.parquet(f"s3a://{s3_bucket}/{s3_key}/order_fact.parquet",mode='overwrite')
 
