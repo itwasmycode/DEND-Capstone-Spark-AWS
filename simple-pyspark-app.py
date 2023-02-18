@@ -106,7 +106,7 @@ def process_dim_data(
             inner_df = df.drop_duplicates([primary_key]).select(val)
             if indicator:
                 inner_df \
-                .withColumn("sale",
+                .withColumn("state_bottle_retail",
                             regexp_replace('state_bottle_retail', '$', '')) \
                 .withColumn("state_bottle_retail", round(df.sale.cast(DoubleType()),2)) \
                 .withColumn("sale",

@@ -145,6 +145,9 @@ Resources:
         Name: time
         StorageDescriptor:
           Columns:
+            - Name: date
+              Type: string
+              Comment: The unique identifier of the date
             - Name: date_ex
               Type: int
               Comment: The unique identifier of the date
