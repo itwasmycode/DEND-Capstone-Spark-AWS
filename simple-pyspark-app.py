@@ -10,7 +10,7 @@ from pyspark.sql.functions import (
     weekofyear,
 )
 from pyspark.sql.types import FloatType,StringType, IntegerType, StructField, StructType
-
+from pyspark.sql.functions import regexp_replace
 import logging
 
 
@@ -129,6 +129,11 @@ def process_dim_data(
     time_dim.write.parquet(f"s3a://{s3_bucket}/{s3_key}/{output}",mode='overwrite')
 
     order_fact = df.select(fact_table)
+    order_fact.withColumn("state_bottle_cost",
+                        regexp_replace('state_bottle_cost', '$', '')) \
+            .withColumn("state_retail_cost",
+                        regexp_replace('state_retail_cost', '$', ''))
+             
     order_fact.write.parquet(f"s3a://{s3_bucket}/{s3_key}/order_fact.parquet",mode='overwrite')
 
 if __name__ == "__main__":
