@@ -8,9 +8,10 @@ from pyspark.sql.functions import (
     quarter,
     month,
     weekofyear,
+    regexp_replace,
+    round
 )
 from pyspark.sql.types import FloatType, StringType, IntegerType, DoubleType, StructField, StructType
-from pyspark.sql.functions import regexp_replace
 import logging
 
 
@@ -107,10 +108,12 @@ def process_dim_data(
                 inner_df \
                 .withColumn("state_bottle_retail_item",
                             regexp_replace(col('state_bottle_retail'), "[^0-9.]", "")) \
-                .withColumn("state_bottle_retail_dollar", col("state_bottle_retail_item").cast("double")) \
+                .withColumn("state_bottle_retail_dollar", col("state_bottle_retail_item").cast("float")) \
+                .withColumn("rounded_state_bottle_retail_dollar",round(col("state_bottle_retail_dollar"),2)) \
                 .withColumn("state_bottle_cost_item",
                             regexp_replace(col('state_bottle_cost'), "[^0-9.]", '')) \
-                .withColumn("state_bottle_cost_item_dollar", col("state_bottle_cost_item").cast("double"))        
+                .withColumn("state_bottle_cost_item_dollar", col("state_bottle_cost_item").cast("float")) \
+                .withColumn("rounded_state_bottle_cost_dollar",round(col("state_bottle_cost_item_dollar"),2))     
             logging.warning(f"Length of dimension {key} is : {inner_df.count()}") 
         else:
             inner_df = df.drop_duplicates(val).select(val)
@@ -140,7 +143,8 @@ def process_dim_data(
     order_fact \
             .withColumn("sale_total",
                         regexp_replace(col("sale"), "[^0-9.]", "")) \
-            .withColumn("sale_total_dollars", col("sale_total").cast("double")) \
+            .withColumn("sale_total_dollars", col("sale_total").cast("float")) \
+            .withColumn("rounded_sale_total_dollars",round(col("sale_total_dollars"),2))  \
             .drop("sale","sale_total")
 
     order_fact.write.parquet(f"s3a://{s3_bucket}/{s3_key}/order_fact.parquet",mode='overwrite')

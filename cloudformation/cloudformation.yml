@@ -186,11 +186,11 @@ Resources:
             - Name: date
               Type: string
               Comment: The description of the item
-            - Name: state_bottle_retail_dollar
-              Type: double
+            - Name: rounded_state_bottle_retail_dollar
+              Type: float
               Comment: Retail of the bottle item
-            - Name: state_bottle_cost_item_dollar
-              Type: double
+            - Name: rounded_state_bottle_cost_dollar
+              Type: float
               Comment: Cost of a bottle item
           Location: s3://sparkcapstonebucket/test_key/item_price_table.parquet/
           InputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat
@@ -237,7 +237,7 @@ Resources:
               Type: float
               Comment: How much volume sold in ml
             - Name: sale_total_dollars
-              Type: double
+              Type: float
               Comment: How much a sale total
           Location: s3://sparkcapstonebucket/test_key/order_fact.parquet/
           InputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat
