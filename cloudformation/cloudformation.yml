@@ -233,12 +233,12 @@ Resources:
             - Name: bottles_sold
               Type: int
               Comment: How many bottle sold in one transaction
-            - Name: sale
-              Type: float
-              Comment: How much a sale total
             - Name: volume_sold_liters
               Type: float
               Comment: How much volume sold in ml
+            - Name: sale_total
+              Type: float
+              Comment: How much a sale total
           Location: s3://sparkcapstonebucket/test_key/order_fact.parquet/
           InputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat
           OutputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat
