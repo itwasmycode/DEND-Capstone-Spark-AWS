@@ -107,11 +107,11 @@ def process_dim_data(
             if indicator:
                 inner_df \
                 .withColumn("state_bottle_retail",
-                            regexp_replace('state_bottle_retail', '$', '')) \
-                .withColumn("state_bottle_retail", inner_df.state_bottle_retail.cast(DoubleType())) \
+                            regexp_replace(col('state_bottle_retail'), "[^0-9.]", "")) \
+                .withColumn("state_bottle_retail", inner_df.state_bottle_retail.cast("double")) \
                 .withColumn("state_bottle_cost",
-                            regexp_replace('state_bottle_cost', '$', '')) \
-                .withColumn("state_bottle_cost", inner_df.state_bottle_cost.cast(DoubleType()))        
+                            regexp_replace(col('state_bottle_cost'), "[^0-9.]", '')) \
+                .withColumn("state_bottle_cost", inner_df.state_bottle_cost.cast("double"))        
             logging.warning(f"Length of dimension {key} is : {inner_df.count()}") 
         else:
             inner_df = df.drop_duplicates(val).select(val)
@@ -140,10 +140,10 @@ def process_dim_data(
     order_fact = df.select(fact_table)
     order_fact \
             .withColumn("sale_total",
-                        regexp_replace('sale', '$', '')) \
-            .withColumn("sale_total", order_fact.sale.cast(DoubleType())) \
+                        regexp_replace(col("sale"), "[^0-9.]", "")) \
+            .withColumn("sale_total", order_fact.sale.cast("double")) \
             .drop("sale")
-             
+
     order_fact.write.parquet(f"s3a://{s3_bucket}/{s3_key}/order_fact.parquet",mode='overwrite')
 
 if __name__ == "__main__":
