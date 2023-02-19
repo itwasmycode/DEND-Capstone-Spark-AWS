@@ -186,12 +186,12 @@ Resources:
             - Name: date
               Type: string
               Comment: The description of the item
-            - Name: state_bottle_cost
-              Type: float
-              Comment: Cost of a bottle item
-            - Name: state_bottle_retail
+            - Name: state_bottle_retail_item
               Type: float
               Comment: Retail of the bottle item
+            - Name: state_bottle_cost_item
+              Type: float
+              Comment: Cost of a bottle item
           Location: s3://sparkcapstonebucket/test_key/item_price_table.parquet/
           InputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat
           OutputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat
