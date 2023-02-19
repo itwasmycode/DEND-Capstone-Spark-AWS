@@ -108,10 +108,10 @@ def process_dim_data(
                 inner_df \
                 .withColumn("state_bottle_retail",
                             regexp_replace(col('state_bottle_retail'), "[^0-9.]", "")) \
-                .withColumn("state_bottle_retail", inner_df.state_bottle_retail.cast("double")) \
+                .withColumn("state_bottle_retail", inner_df.state_bottle_retail.cast("float")) \
                 .withColumn("state_bottle_cost",
                             regexp_replace(col('state_bottle_cost'), "[^0-9.]", '')) \
-                .withColumn("state_bottle_cost", inner_df.state_bottle_cost.cast("double"))        
+                .withColumn("state_bottle_cost", inner_df.state_bottle_cost.cast("float"))        
             logging.warning(f"Length of dimension {key} is : {inner_df.count()}") 
         else:
             inner_df = df.drop_duplicates(val).select(val)
@@ -141,7 +141,7 @@ def process_dim_data(
     order_fact \
             .withColumn("sale_total",
                         regexp_replace(col("sale"), "[^0-9.]", "")) \
-            .withColumn("sale_total", order_fact.sale.cast("double")) \
+            .withColumn("sale_total", order_fact.sale.cast("float")) \
             .drop("sale")
 
     order_fact.write.parquet(f"s3a://{s3_bucket}/{s3_key}/order_fact.parquet",mode='overwrite')
