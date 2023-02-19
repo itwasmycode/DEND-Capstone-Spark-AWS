@@ -53,8 +53,7 @@ def process_dim_data(
     data_location = f"s3a://{s3_bucket}/Iowa_Liquor_Sales.csv"
     logging.warning(f"Data location is {data_location}.")
     logging.warning(f"Trying to get dimension lookups")
-    fact_table = ["invoice_number","date","store_number","zip_code","county_number",
-    "vendor_number","item_number","bottles_sold","sale","volume_sold_liters"]
+    fact_table = ["invoice_number","date","store_number","zip_code","county_number","vendor_number","item_number","bottles_sold","sale","volume_sold_liters"]
     schema = StructType([StructField("invoice_number", StringType(), True),
                      StructField("date", StringType(), False),
                      StructField("store_number", IntegerType(), False),
@@ -106,12 +105,12 @@ def process_dim_data(
             inner_df = df.drop_duplicates([primary_key]).select(val)
             if indicator:
                 inner_df \
-                .withColumn("state_bottle_retail",
+                .withColumn("state_bottle_retail_item",
                             regexp_replace(col('state_bottle_retail'), "[^0-9.]", "")) \
-                .withColumn("state_bottle_retail", inner_df.state_bottle_retail.cast("float")) \
-                .withColumn("state_bottle_cost",
+                .withColumn("state_bottle_retail", inner_df.state_bottle_retail_item.cast("float")) \
+                .withColumn("state_bottle_cost_item",
                             regexp_replace(col('state_bottle_cost'), "[^0-9.]", '')) \
-                .withColumn("state_bottle_cost", inner_df.state_bottle_cost.cast("float"))        
+                .withColumn("state_bottle_cost_item", inner_df.state_bottle_cost_item.cast("float"))        
             logging.warning(f"Length of dimension {key} is : {inner_df.count()}") 
         else:
             inner_df = df.drop_duplicates(val).select(val)
@@ -141,7 +140,7 @@ def process_dim_data(
     order_fact \
             .withColumn("sale_total",
                         regexp_replace(col("sale"), "[^0-9.]", "")) \
-            .withColumn("sale_total", order_fact.sale.cast("float")) \
+            .withColumn("sale_total", order_fact.sale_total.cast("float")) \
             .drop("sale")
 
     order_fact.write.parquet(f"s3a://{s3_bucket}/{s3_key}/order_fact.parquet",mode='overwrite')
