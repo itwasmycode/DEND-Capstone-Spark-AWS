@@ -105,7 +105,7 @@ def process_dim_data(
             logging.warning(f"primary key{primary_key}")
             inner_df = df.drop_duplicates([primary_key]).select(val)
             if indicator:
-                inner_df \
+                inner_df = inner_df \
                 .withColumn("state_bottle_retail",
                             regexp_replace(col('state_bottle_retail'), "[^0-9.]", "")) \
                 .withColumn("state_bottle_retail_dollar", col("state_bottle_retail").cast("double")) \
@@ -139,7 +139,7 @@ def process_dim_data(
     time_dim.write.parquet(f"s3a://{s3_bucket}/{s3_key}/{output}",mode='overwrite')
 
     order_fact = df.select(fact_table)
-    order_fact \
+    order_fact = order_fact \
             .withColumn("sale",
                         regexp_replace(col("sale"), "[^0-9.]", "")) \
             .withColumn("sale_dollar", col("sale").cast("double")) \
