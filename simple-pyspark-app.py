@@ -99,20 +99,18 @@ def process_dim_data(
     for key, val in dimension_lookup.items():
         part_key = key.lower() + "_table"+".parquet"
         logging.warning(f"Current dimension is {key}.")
-        if key != "Item_Price":
-            indicator = "state_bottle_cost" in val or "state_bottle_retail" in val
+        if key == "Item_Price":
             primary_key = val[0]
             logging.warning(f"primary key{primary_key}")
-            inner_df = df.drop_duplicates([primary_key]).select(val)
-            if indicator:
-                inner_df = inner_df \
+            inner_df = df.drop_duplicates(val[:2]).select(val)
+            inner_df = inner_df \
                 .withColumn("state_bottle_retail",
                             regexp_replace(col('state_bottle_retail'), "[^0-9.]", "")) \
-                .withColumn("state_bottle_retail_dollar", col("state_bottle_retail").cast("double")) \
-                .withColumn("state_bottle_cost",
+                .withColumn("state_bottle_retail_dollar", col("state_bottle_retail").cast("double")) 
+            inner_df = inner_df.withColumn("state_bottle_cost",
                             regexp_replace(col('state_bottle_cost'), "[^0-9.]", '')) \
                 .withColumn("state_bottle_cost_dollar", col("state_bottle_cost").cast("double")) \
-                .select("item_number","date","state_bottle_cost_dollar","state_bottle_retail_dollar")
+                .select(["item_number","date","state_bottle_cost_dollar","state_bottle_retail_dollar"])
             logging.warning(f"Length of dimension {key} is : {inner_df.count()}") 
         else:
             inner_df = df.drop_duplicates(val).select(val)

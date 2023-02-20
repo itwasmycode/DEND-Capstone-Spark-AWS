@@ -99,7 +99,7 @@ Resources:
         StorageDescriptor:
           Columns:
             - Name: zip_code
-              Type: int
+              Type: string
               Comment: The unique identifier of the city
             - Name: city
               Type: string
