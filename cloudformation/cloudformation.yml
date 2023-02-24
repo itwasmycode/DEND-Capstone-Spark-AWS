@@ -143,7 +143,7 @@ Resources:
               Type: string
               Comment: The unique identifier of the date
             - Name: date_ex
-              Type: int
+              Type: date
               Comment: The unique identifier of the date
             - Name: weekend
               Type: int
@@ -223,7 +223,10 @@ Resources:
               Comment: Vendor Number
             - Name: item_number
               Type: int
-              Comment: Identifier of item
+              Comment: Identifier of the item
+            - Name: category_number
+              Type: int
+              Comment: Category of the item
             - Name: bottles_sold
               Type: int
               Comment: How many bottle sold in one transaction

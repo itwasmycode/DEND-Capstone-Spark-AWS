@@ -133,7 +133,7 @@ def process_dim_data(
         .withColumn("quarter", quarter("date_ex"))
         .withColumn("weekofyear", weekofyear("date_ex"))
         .dropDuplicates(["date_ex", "weekend", "year", "month", "quarter"])
-        .select(["date_ex", "weekend", "year", "month", "quarter"])
+        .select(["date","date_ex", "weekend", "year", "month", "quarter"])
     )
     
     logging.warning(f"Length of time_dimension is {time_dim.count()}")
@@ -145,7 +145,7 @@ def process_dim_data(
             .withColumn("sale",
                         regexp_replace(col("sale"), "[^0-9.]", "")) \
             .withColumn("sale_dollar", col("sale").cast("double")) \
-            .select(["invoice_number","date","store_number","zip_code","county_number","vendor_number","item_number","bottles_sold","sale_dollar","volume_sold_liters"])
+            .select(["invoice_number","date","store_number","zip_code","county_number","vendor_number","item_number","category_number","bottles_sold","sale_dollar","volume_sold_liters"])
     order_fact.printSchema()
     order_fact.write.parquet(f"s3a://{s3_bucket}/{s3_key}/order_fact.parquet",mode='overwrite')
 
