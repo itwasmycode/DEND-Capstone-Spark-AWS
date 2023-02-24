@@ -111,7 +111,11 @@ def process_dim_data(
                             regexp_replace(col('state_bottle_cost'), "[^0-9.]", '')) \
                 .withColumn("state_bottle_cost_dollar", col("state_bottle_cost").cast("double")) \
                 .select(["item_number","date","state_bottle_cost_dollar","state_bottle_retail_dollar"])
-            logging.warning(f"Length of dimension {key} is : {inner_df.count()}") 
+            logging.warning(f"Length of dimension {key} is : {inner_df.count()}")
+        elif key == "Category":
+            inner_df = df.withColumn("Category",col("Category").cast('int'))
+            inner_df = df.drop_duplicates(val).select(val)
+            logging.warning(f"Length of dimension {key} is : {inner_df.count()}")
         else:
             inner_df = df.drop_duplicates(val).select(val)
             logging.warning(f"Length of dimension {key} is : {inner_df.count()}")
