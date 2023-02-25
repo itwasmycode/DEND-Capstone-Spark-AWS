@@ -5,8 +5,8 @@ glue_client = boto3.client('glue')
 
 def lambda_handler(event, context):
     # Replace the values below with your own table and S3 bucket names
-    table_name = 'your_table_name'
-    bucket_name = 'your_bucket_name'
+    table_name = 'orders'
+    bucket_name = 'mysparkawsbucket'
     file_name = 'row_count.txt'
     
     # Get the row count for the table
