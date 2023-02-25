@@ -6,7 +6,7 @@ on:
       - main
 defaults:
  run:
-  working-directory: DEND-Capstone-Spark-AWS
+  working-directory: ./home/runner/work/DEND-Capstone-Spark-AWS/
 
 jobs:
   docker:
