@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+defaults:
+ run:
+  working-directory: ./
 
 jobs:
   docker:
@@ -43,15 +46,10 @@ jobs:
         args: s3 cp simple-pyspark-app.py s3://mysparkawsbucket/spark-app.py
 
   cloudformation:
-    env:
-      WORKING_DIR: ./DEND-Capstone-Spark-AWS
     runs-on: ubuntu-latest
     needs: docker
     if: success() && needs.docker.result == 'success'
     steps:
-      - name: Checkout
-        run: ls
-        working-directory: ${{env.WORKING_DIR}}
       - name: Deploy CloudFormation stack
         uses: aws-actions/aws-cloudformation-github-deploy@v1.1.0
         with:
