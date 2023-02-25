@@ -294,9 +294,8 @@ Resources:
     Properties:
       PackageType: Image
       Code:
-        ImageUri: <your-ECR-image-URI>
+        ImageUri: 740062030037.dkr.ecr.us-west-2.amazonaws.com/data-quality-ecr
       Role: !GetAtt MyLambdaExecutionRole.Arn
-      Runtime: python3.8
       Timeout: 300
   MyLambdaExecutionRole:
     Type: AWS::IAM::Role
