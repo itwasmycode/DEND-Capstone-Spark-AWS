@@ -295,8 +295,8 @@ Resources:
       Code:
         ImageUri: 740062030037.dkr.ecr.us-west-2.amazonaws.com/data-quality-ecr:latest
       Role: !GetAtt MyLambdaExecutionRole.Arn
-      Handler: index.handler
-      Runtime: nodejs14.x
+      Handler: lambda.handler
+      Runtime: python3.8
       Timeout: 300
   MyLambdaExecutionRole:
     Type: AWS::IAM::Role
