@@ -6,7 +6,7 @@ on:
       - main
 defaults:
  run:
-  working-directory: ./home/runner/work/DEND-Capstone-Spark-AWS/
+  working-directory: ${{ github.workspace }}
 
 jobs:
   docker:
