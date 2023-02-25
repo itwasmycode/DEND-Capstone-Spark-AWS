@@ -26,7 +26,7 @@ jobs:
       if: matrix.deployment == 's3' 
       env:
         ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
-        ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
+        ECR_REPOSITORY: data-quality-ecr
       run: |
         cd data_quality_checks/
         docker build -t data-quality-ecr .
