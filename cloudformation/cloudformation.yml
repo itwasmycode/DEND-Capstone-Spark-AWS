@@ -294,9 +294,26 @@ Resources:
     Properties:
       PackageType: Image
       Code:
-        ImageUri: 740062030037.dkr.ecr.us-west-2.amazonaws.com/data-quality-ecr
+        ImageUri: 740062030037.dkr.ecr.us-west-2.amazonaws.com/data-quality-ecr:latest
       Role: !GetAtt MyLambdaExecutionRole.Arn
       Timeout: 300
+
+  MyLambdaExecutionPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: MyLambdaExecutionPolicy
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - ecr:GetAuthorizationToken
+              - ecr:BatchCheckLayerAvailability
+              - ecr:GetDownloadUrlForLayer
+              - ecr:BatchGetImage
+            Resource: "*"
+      Roles:
+        - !Ref MyLambdaExecutionRole
   MyLambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
