@@ -1,6 +1,7 @@
 FROM public.ecr.aws/lambda/python:3.8
 
-RUN yum update -y && \
+RUN echo "deltarpm=0" >> /etc/yum.conf && \
+    yum update -y && \
     yum install -y python3-virtualenv && \
     yum clean all && \
     rm -rf /var/cache/yum
