@@ -29,7 +29,9 @@ jobs:
       run: |
         cd data_quality_checks/
         docker build -t data-quality-ecr .
+        echo "image=$ECR_REGISTRY/data-quality-ecr:latest" >> $GITHUB_OUTPUT
         docker tag data-quality-ecr:latest $ECR_REGISTRY/data-quality-ecr:latest
+        echo "image=$ECR_REGISTRY/data-quality-ecr:latest" >> $GITHUB_OUTPUT
         aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin $ECR_REGISTRY
         echo "image=$ECR_REGISTRY/data-quality-ecr:latest" >> $GITHUB_OUTPUT
         docker push $ECR_REGISTRY/data-quality-ecr:latest
