@@ -31,6 +31,7 @@ jobs:
         docker build -t data-quality-ecr .
         docker tag data-quality-ecr:latest $ECR_REGISTRY/data-quality-ecr:latest
         aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin $ECR_REGISTRY
+        echo "image=$ECR_REGISTRY/data-quality-ecr:latest" >> $GITHUB_OUTPUT
         docker push $ECR_REGISTRY/data-quality-ecr:latest
 
     - name: Upload spark-app.py to S3
