@@ -30,7 +30,7 @@ jobs:
       run: |
         cd data_quality_checks/
         docker build -t data-quality-ecr .
-        docker tag data-quality-ecr:latest $ECR_REGISTRY/$ECR_REPOSITORY:latest
+        docker tag data-quality-ecr:latest $ECR_REGISTRY/data-quality-ecr:latest
         aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin $ECR_REGISTRY
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
