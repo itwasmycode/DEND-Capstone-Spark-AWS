@@ -1,8 +1,11 @@
 FROM public.ecr.aws/lambda/python:3.8
 
+RUN yum install -y python3-virtualenv
+
 COPY app.py requirements.txt ./
 
-RUN pip install --upgrade pip --root-user-action=ignore
-RUN pip install -r requirements.txt --root-user-action=ignore
+RUN python3 -m venv /app-env \
+  && source /app-env/bin/activate \
+  && pip3 install --no-cache-dir -r requirements.txt
 
 CMD ["app.lambda_handler"]
