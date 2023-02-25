@@ -292,10 +292,10 @@ Resources:
   MyLambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
+      PackageType: Image
       Code:
         ImageUri: <your-ECR-image-URI>
       Role: !GetAtt MyLambdaExecutionRole.Arn
-      Handler: app.lambda_handler
       Runtime: python3.8
       Timeout: 300
   MyLambdaExecutionRole:
