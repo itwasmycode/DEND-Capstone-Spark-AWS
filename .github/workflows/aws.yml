@@ -26,7 +26,7 @@ jobs:
       if: matrix.deployment == 's3' 
       env:
         ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
-        ECR_REPOSITORY: my-ecr-repository
+        ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
       run: |
         cd data_quality_checks/
         docker build -t $ECR_REPOSITORY .
