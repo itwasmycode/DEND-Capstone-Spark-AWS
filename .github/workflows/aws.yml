@@ -1,4 +1,4 @@
-name: Upload to S3
+name: Upload to S3 and Deploy CloudFormation stack
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        deployment: [s3, cloudformation]
+        deployment: [docker, s3, cloudformation]
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -23,7 +23,7 @@ jobs:
         aws-region: us-west-2
 
     - name: Dockerize data_quality_checks file and push to ECR
-      if: matrix.deployment == 's3' 
+      if: matrix.deployment == 'docker' 
       env:
         ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
         ECR_REPOSITORY: data-quality-ecr
@@ -35,20 +35,16 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
     - name: Upload spark-app.py to S3
-      if: matrix.deployment == 's3' && success()
+      if: matrix.deployment == 's3' && success() && needs.deploy.result == 'success'
       uses: docker://amazon/aws-cli:2.0.7
       with:
         args: s3 cp simple-pyspark-app.py s3://mysparkawsbucket/spark-app.py
         
 
     - name: Deploy CloudFormation stack
-      if: matrix.deployment == 'cloudformation' && success()
+      if: matrix.deployment == 'cloudformation' && success() && needs.deploy.result == 'success'
       uses: aws-actions/aws-cloudformation-github-deploy@v1.1.0
       with:
         template: cloudformation/cloudformation.yml
         name: my-cloudformation-stack
         capabilities: CAPABILITY_NAMED_IAM
-
-
-
-
