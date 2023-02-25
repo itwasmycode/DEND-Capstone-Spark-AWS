@@ -37,6 +37,10 @@ jobs:
     needs: docker
     if: success() && needs.docker.result == 'success'
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Go to base directory
+      run: cd DEND-Capstone-Spark-AWS
     - name: Upload spark-app.py to S3
       uses: docker://amazon/aws-cli:2.0.7
       with:
@@ -47,10 +51,14 @@ jobs:
     needs: docker
     if: success() && needs.docker.result == 'success'
     steps:
-    - name: Deploy CloudFormation stack
-      uses: aws-actions/aws-cloudformation-github-deploy@v1.1.0
-      with:
-        template: cloudformation/cloudformation.yml
-        name: my-cloudformation-stack
-        capabilities: CAPABILITY_NAMED_IAM
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Go to base directory
+        run: cd DEND-Capstone-Spark-AWS
+      - name: Deploy CloudFormation stack
+        uses: aws-actions/aws-cloudformation-github-deploy@v1.1.0
+        with:
+          template: cloudformation/cloudformation.yml
+          name: my-cloudformation-stack
+          capabilities: CAPABILITY_NAMED_IAM
 
