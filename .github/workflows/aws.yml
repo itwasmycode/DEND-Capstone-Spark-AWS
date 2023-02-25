@@ -25,8 +25,8 @@ jobs:
     - name: Dockerize data_quality_checks file and push to ECR
       if: matrix.deployment == 's3' 
       env:
-        ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
-        ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+        ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
+        ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
       run: |
         cd data_quality_checks/
         docker build -t $ECR_REPOSITORY .
