@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-defaults:
- run:
-  working-directory: ${{ github.workspace }}
 
 jobs:
   docker:
@@ -50,6 +47,8 @@ jobs:
     needs: docker
     if: success() && needs.docker.result == 'success'
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Deploy CloudFormation stack
         uses: aws-actions/aws-cloudformation-github-deploy@v1.1.0
         with:
