@@ -50,6 +50,7 @@ jobs:
     if: success() && needs.docker.result == 'success'
     steps:
       - name: Checkout
+        run: ls
         working-directory: ${{env.WORKING_DIR}}
       - name: Deploy CloudFormation stack
         uses: aws-actions/aws-cloudformation-github-deploy@v1.1.0
