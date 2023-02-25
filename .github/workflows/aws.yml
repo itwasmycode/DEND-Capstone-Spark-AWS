@@ -28,6 +28,7 @@ jobs:
         docker build -t data-quality-ecr:latest .
         docker tag data-quality-ecr:latest $ECR_REGISTRY/data-quality-ecr:latest
         docker push $ECR_REGISTRY/data-quality-ecr:latest
+        cd ..
     outputs:
       ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
 
