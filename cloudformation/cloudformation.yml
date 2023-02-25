@@ -288,16 +288,16 @@ Resources:
               - "spark-submit"
               - "s3://mysparkawsbucket/spark-app.py"
 
-  HelloWorldFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      PackageType: Image
-      ImageUri: 740062030037.dkr.ecr.us-west-2.amazonaws.com/data-quality-ecr:latest
-      ImageConfig:
-        Command:
-          - "app.lambda_handler"
-      Role: !GetAtt MyLambdaExecutionRole.Arn
 
+  MyLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        ImageUri: <your-ECR-image-URI>
+      Role: !GetAtt MyLambdaExecutionRole.Arn
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Timeout: 300
   MyLambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
