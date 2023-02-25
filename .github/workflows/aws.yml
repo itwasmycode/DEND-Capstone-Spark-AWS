@@ -26,13 +26,12 @@ jobs:
       if: matrix.deployment == 'docker' 
       env:
         ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
-        ECR_REPOSITORY: data-quality-ecr
       run: |
         cd data_quality_checks/
         docker build -t data-quality-ecr .
         docker tag data-quality-ecr:latest $ECR_REGISTRY/data-quality-ecr:latest
         aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin $ECR_REGISTRY
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+        docker push $ECR_REGISTRY/data-quality-ecr:latest
 
     - name: Upload spark-app.py to S3
       if: matrix.deployment == 's3' && success() && needs.deploy.result == 'success'
