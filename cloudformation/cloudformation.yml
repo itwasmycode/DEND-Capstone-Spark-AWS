@@ -10,7 +10,7 @@ Resources:
   AthenaDatabase:
     Type: 'AWS::Glue::Database'
     Properties:
-      CatalogId: ${{ env.CATALOG_ID }}
+      CatalogId: !Ref CatalogId
       DatabaseInput:
         Name: mydatabase
         Description: My Athena database
@@ -175,8 +175,8 @@ Resources:
   AthenaTable7:
     Type: 'AWS::Glue::Table'
     Properties:
-      DatabaseName: !Ref CatalogId
-      CatalogId: ${{ env.CATALOG_ID }}
+      DatabaseName: !Ref AthenaDatabase
+      CatalogId: !Ref CatalogId
       TableInput:
         Name: item_price
         StorageDescriptor:
