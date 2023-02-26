@@ -3,9 +3,11 @@ Parameters:
   CatalogId:
     Type: String
     Description: The Catalog ID for the Glue table.
+    Default: "123456789"
   ImageUri:
       Type: String
       Description: ImageURI for lambda.
+      Default: "123456789"
 Resources:
   AthenaDatabase:
     Type: 'AWS::Glue::Database'
@@ -19,7 +21,7 @@ Resources:
     Type: 'AWS::Glue::Table'
     Properties:
       DatabaseName: !Ref AthenaDatabase
-      CatalogId: ${{ env.CATALOG_ID }}
+      CatalogId: !Ref CatalogId
       TableInput:
         Name: vendor
         StorageDescriptor:
@@ -42,7 +44,7 @@ Resources:
     Type: 'AWS::Glue::Table'
     Properties:
       DatabaseName: !Ref AthenaDatabase
-      CatalogId: ${{ env.CATALOG_ID }}
+      CatalogId: !Ref CatalogId
       TableInput:
         Name: store
         StorageDescriptor:
@@ -71,7 +73,7 @@ Resources:
     Type: 'AWS::Glue::Table'
     Properties:
       DatabaseName: !Ref AthenaDatabase
-      CatalogId: ${{ env.CATALOG_ID }}
+      CatalogId: !Ref CatalogId
       TableInput:
         Name: item
         StorageDescriptor:
@@ -94,7 +96,7 @@ Resources:
     Type: 'AWS::Glue::Table'
     Properties:
       DatabaseName: !Ref AthenaDatabase
-      CatalogId: ${{ env.CATALOG_ID }}
+      CatalogId: !Ref CatalogId
       TableInput:
         Name: city
         StorageDescriptor:
@@ -118,7 +120,7 @@ Resources:
     Type: 'AWS::Glue::Table'
     Properties:
       DatabaseName: !Ref AthenaDatabase
-      CatalogId: ${{ env.CATALOG_ID }}
+      CatalogId: !Ref CatalogId
       TableInput:
         Name: category
         StorageDescriptor:
@@ -141,7 +143,7 @@ Resources:
     Type: 'AWS::Glue::Table'
     Properties:
       DatabaseName: !Ref AthenaDatabase
-      CatalogId: ${{ env.CATALOG_ID }}
+      CatalogId: !Ref CatalogId
       TableInput:
         Name: time
         StorageDescriptor:
@@ -175,7 +177,7 @@ Resources:
   AthenaTable7:
     Type: 'AWS::Glue::Table'
     Properties:
-      DatabaseName: !Ref AthenaDatabase
+      DatabaseName: !Ref CatalogId
       CatalogId: ${{ env.CATALOG_ID }}
       TableInput:
         Name: item_price
@@ -205,7 +207,7 @@ Resources:
     Type: 'AWS::Glue::Table'
     Properties:
       DatabaseName: !Ref AthenaDatabase
-      CatalogId: ${{ env.CATALOG_ID }}
+      CatalogId: !Ref CatalogId
       TableInput:
         Name: orders
         StorageDescriptor:
@@ -301,7 +303,7 @@ Resources:
     Properties:
       PackageType: Image
       Code:
-        ImageUri:  ${{ env.IMAGE_URI }}
+        ImageUri:  !Ref ImageUri
       Role: !GetAtt MyLambdaExecutionRole.Arn
       Timeout: 300
 
