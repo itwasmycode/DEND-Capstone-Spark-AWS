@@ -1,19 +1,8 @@
 import pyspark
-from pyspark.sql import SparkSession, DataFrame
-from pyspark.sql.functions import (
-    col,
-    dayofweek,
-    to_date,
-    year,
-    quarter,
-    month,
-    weekofyear,
-    regexp_replace,
-    round
-)
-from pyspark.sql.types import FloatType, StringType, IntegerType, DoubleType, StructField, StructType
+from pyspark.sql import SparkSession
 import logging
-
+from utils import get_dimension_lookup, get_struct_types
+from file_processor import FileParser
 
 def create_spark_session():
     """
@@ -35,8 +24,7 @@ def create_spark_session():
     )
     return spark
 
-
-def process_dim_data(
+def process_data(
     ss: pyspark.sql.session.SparkSession, s3_bucket: str, s3_key: str, output: str
     ) -> None:
     """
@@ -54,101 +42,14 @@ def process_dim_data(
     data_location = f"s3a://{s3_bucket}/Iowa_Liquor_Sales.csv"
     logging.warning(f"Data location is {data_location}.")
     logging.warning(f"Trying to get dimension lookups")
-    fact_table = ["invoice_number","date","store_number","zip_code","county_number","vendor_number","item_number","bottles_sold","sale","volume_sold_liters"]
-    schema = StructType([StructField("invoice_number", StringType(), True),
-                     StructField("date", StringType(), False),
-                     StructField("store_number", IntegerType(), False),
-                     StructField("store_name", StringType(), False),
-                     StructField("address", StringType(), False),
-                     StructField("city", StringType(), False),
-                     StructField("zip_code", StringType(), False),
-                     StructField("store_location", StringType(), False),
-                     StructField("county_number", IntegerType(), False),
-                     StructField("county", StringType(), False),
-                     StructField("category", IntegerType(), False),
-                     StructField("category_name", StringType(), False),
-                     StructField("vendor_number", IntegerType(), False),
-                     StructField("vendor_name", StringType(), False),
-                     StructField("item_number", IntegerType(), False),
-                     StructField("item_description", StringType(), False),
-                     StructField("pack", IntegerType(), False),
-                     StructField("bottle_volume", StringType(), False),
-                     StructField("state_bottle_cost", StringType(), False),
-                     StructField("state_bottle_retail", StringType(), False),
-                     StructField("bottles_sold", IntegerType(), False),
-                     StructField("sale", StringType(), False),
-                     StructField("volume_sold_liters", FloatType(), False),
-                     StructField("volume_sold_gallons", FloatType(), False)])
 
+    schema = get_struct_types()
     df = ss.read.option("header", True).option("multiline","true").csv(data_location,schema=schema)
 
-    df = df.withColumn("date_ex", to_date("date", "MM/dd/yyyy"))
-
-    dimension_lookup = {
-        "Store": ["store_number", "store_name", "address", "store_location"],
-        "Item": [
-            "item_number",
-            "item_description"
-        ],
-        "Vendor": ["vendor_number", "vendor_name"],
-        "City": ["zip_code", "city"],
-        "Category": ["category", "category_name"],
-        "Item_Price": ["item_number","date","state_bottle_cost","state_bottle_retail"]
-    }
-
-    for key, val in dimension_lookup.items():
-        part_key = key.lower() + "_table"+".parquet"
-        logging.warning(f"Current dimension is {key}.")
-        if key == "Item_Price":
-            primary_key = val[0]
-            logging.warning(f"primary key{primary_key}")
-            inner_df = df.drop_duplicates(val[:2]).select(val)
-            inner_df = inner_df \
-                .withColumn("state_bottle_retail",
-                            regexp_replace(col('state_bottle_retail'), "[^0-9.]", "")) \
-                .withColumn("state_bottle_retail_dollar", col("state_bottle_retail").cast("double")) 
-            inner_df = inner_df.withColumn("state_bottle_cost",
-                            regexp_replace(col('state_bottle_cost'), "[^0-9.]", '')) \
-                .withColumn("state_bottle_cost_dollar", col("state_bottle_cost").cast("double")) \
-                .select(["item_number","date","state_bottle_cost_dollar","state_bottle_retail_dollar"])
-            logging.warning(f"Length of dimension {key} is : {inner_df.count()}")
-        elif key == "Category":
-            inner_df = df.withColumn("Category",col("Category").cast('int'))
-            inner_df = df.drop_duplicates(val).select(val)
-            logging.warning(f"Length of dimension {key} is : {inner_df.count()}")
-        else:
-            inner_df = df.drop_duplicates(val).select(val)
-            logging.warning(f"Length of dimension {key} is : {inner_df.count()}")
-        logging.warning(f"Schema is : \n{inner_df.printSchema()}")
-        inner_df.write.parquet(f"s3a://{s3_bucket}/{s3_key}/{part_key}",mode='overwrite')
-        
-    logging.warning(f"Trying to extract time dimension")
-
-    # Extract time dimension
-    time_dim = (
-        df \
-        .withColumn("weekend", dayofweek("date_ex").isin([1, 7]).cast("int"))
-        .withColumn("year", year("date_ex"))
-        .withColumn("month", month("date_ex"))
-        .withColumn("quarter", quarter("date_ex"))
-        .withColumn("weekofyear", weekofyear("date_ex"))
-        .dropDuplicates(["date_ex", "weekend", "year", "month", "quarter"])
-        .select(["date","date_ex", "weekend", "year", "month", "quarter"])
-    )
-    
-    logging.warning(f"Length of time_dimension is {time_dim.count()}")
-    logging.warning(f"Schema is : \n{time_dim.printSchema()}")
-    time_dim.write.parquet(f"s3a://{s3_bucket}/{s3_key}/{output}",mode='overwrite')
-
-    order_fact = df.select(fact_table)
-    order_fact = order_fact \
-            .withColumn("sale",
-                        regexp_replace(col("sale"), "[^0-9.]", "")) \
-            .withColumn("sale_dollar", col("sale").cast("double")) \
-            .select(["invoice_number","date","store_number","zip_code","county_number","vendor_number","item_number","category_number","bottles_sold","sale_dollar","volume_sold_liters"])
-    order_fact.printSchema()
-    order_fact.write.parquet(f"s3a://{s3_bucket}/{s3_key}/order_fact.parquet",mode='overwrite')
+    dimension_lookup = get_dimension_lookup()
+    fp = FileParser(dimension_lookup, df, s3_bucket, s3_key)
+    fp.parse()
 
 if __name__ == "__main__":
     session = create_spark_session()
-    process_dim_data(session, "sparkcapstonebucket", "test_key", "time_table.parquet")
+    process_data(session, "sparkcapstonebucket", "test_key", "time_table.parquet")
