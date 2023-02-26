@@ -69,7 +69,6 @@ jobs:
           template: cloudformation/cloudformation.yml
           name: my-cloudformation-stack
           capabilities: CAPABILITY_NAMED_IAM
-          region: us-west-2
           parameter-overrides:
             CATALOG_ID = '{{secrets.CATALOG_ID}}'
             IMAGE_URI = '{{secrets.IMAGE_URI}}'
