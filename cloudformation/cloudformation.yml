@@ -3,7 +3,7 @@ Resources:
   AthenaDatabase:
     Type: 'AWS::Glue::Database'
     Properties:
-      CatalogId: '740062030037'
+      CatalogId: ${{ env.CATALOG_ID }}
       DatabaseInput:
         Name: mydatabase
         Description: My Athena database
@@ -12,7 +12,7 @@ Resources:
     Type: 'AWS::Glue::Table'
     Properties:
       DatabaseName: !Ref AthenaDatabase
-      CatalogId: '740062030037'
+      CatalogId: ${{ env.CATALOG_ID }}
       TableInput:
         Name: vendor
         StorageDescriptor:
@@ -35,7 +35,7 @@ Resources:
     Type: 'AWS::Glue::Table'
     Properties:
       DatabaseName: !Ref AthenaDatabase
-      CatalogId: '740062030037'
+      CatalogId: ${{ env.CATALOG_ID }}
       TableInput:
         Name: store
         StorageDescriptor:
@@ -64,7 +64,7 @@ Resources:
     Type: 'AWS::Glue::Table'
     Properties:
       DatabaseName: !Ref AthenaDatabase
-      CatalogId: '740062030037'
+      CatalogId: ${{ env.CATALOG_ID }}
       TableInput:
         Name: item
         StorageDescriptor:
@@ -87,7 +87,7 @@ Resources:
     Type: 'AWS::Glue::Table'
     Properties:
       DatabaseName: !Ref AthenaDatabase
-      CatalogId: '740062030037'
+      CatalogId: ${{ env.CATALOG_ID }}
       TableInput:
         Name: city
         StorageDescriptor:
@@ -111,7 +111,7 @@ Resources:
     Type: 'AWS::Glue::Table'
     Properties:
       DatabaseName: !Ref AthenaDatabase
-      CatalogId: '740062030037'
+      CatalogId: ${{ env.CATALOG_ID }}
       TableInput:
         Name: category
         StorageDescriptor:
@@ -134,7 +134,7 @@ Resources:
     Type: 'AWS::Glue::Table'
     Properties:
       DatabaseName: !Ref AthenaDatabase
-      CatalogId: '740062030037'
+      CatalogId: ${{ env.CATALOG_ID }}
       TableInput:
         Name: time
         StorageDescriptor:
@@ -169,7 +169,7 @@ Resources:
     Type: 'AWS::Glue::Table'
     Properties:
       DatabaseName: !Ref AthenaDatabase
-      CatalogId: '740062030037'
+      CatalogId: ${{ env.CATALOG_ID }}
       TableInput:
         Name: item_price
         StorageDescriptor:
@@ -198,7 +198,7 @@ Resources:
     Type: 'AWS::Glue::Table'
     Properties:
       DatabaseName: !Ref AthenaDatabase
-      CatalogId: '740062030037'
+      CatalogId: ${{ env.CATALOG_ID }}
       TableInput:
         Name: orders
         StorageDescriptor:

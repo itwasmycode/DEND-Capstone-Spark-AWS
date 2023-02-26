@@ -11,7 +11,7 @@ def lambda_handler(event, context):
     
     # Get the row count for the table
     response = glue_client.get_table(
-        DatabaseName='your_database_name',
+        DatabaseName='default',
         Name=table_name
     )
     row_count = response['Table']['Parameters']['numRows']

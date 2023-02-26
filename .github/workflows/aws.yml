@@ -70,4 +70,6 @@ jobs:
           name: my-cloudformation-stack
           capabilities: CAPABILITY_NAMED_IAM
           region: us-west-2
-
+          env:
+            CATALOG_ID: ${{ secrets.CATALOG_ID }}
+            IMAGE_URI : ${{ secrets.IMAGE_URI }}
