@@ -64,7 +64,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-west-2
       - name: Deploy CloudFormation stack
-        uses: aws-actions/aws-cloudformation-github-deploy@v1.1.0
+        uses: aws-actions/aws-cloudformation-github-deploy@master
         with:
           template: cloudformation/cloudformation.yml
           name: my-cloudformation-stack
