@@ -3,9 +3,11 @@ Parameters:
   CatalogId:
     Type: String
     Description: The Catalog ID for the Glue table.
+    Default: '1234567'
   ImageUri:
       Type: String
       Description: ImageURI for lambda.
+      Default: '1234567'
 Resources:
   AthenaDatabase:
     Type: 'AWS::Glue::Database'
