@@ -55,8 +55,8 @@ Well, since this project not good fit to process whole data at every day, it is 
 By creating a file in terminal on instance. It can be done.
 #### The database needed to be accessed by 100+ people.
 As a price perspective, it doesn't depend on users but their data they scanned from.<br />
-[Pricing](https://aws.amazon.com/athena/pricing/)
-For accessing purpose there is a documention you can research. It says that:
+[See Pricing](https://aws.amazon.com/athena/pricing/)<br />
+For accessing purpose there is a documention you can research. It says that: <br />
 -Athena service quotas are shared across all workgroups in an account.<br />
 -The maximum number of workgroups you can create per Region in an account is 1000.<br />
 <br />
