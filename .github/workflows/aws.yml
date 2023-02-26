@@ -69,6 +69,5 @@ jobs:
           template: cloudformation/cloudformation.yml
           name: my-cloudformation-stack
           capabilities: CAPABILITY_NAMED_IAM
-          with:
-            CatalogId = '{{secrets.CATALOG_ID}}'
-            ImageUri = '{{secrets.IMAGE_URI}}'
+          CatalogId : '{{secrets.CATALOG_ID}}'
+          ImageUri : '{{secrets.IMAGE_URI}}'
