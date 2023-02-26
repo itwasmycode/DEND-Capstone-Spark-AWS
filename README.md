@@ -59,7 +59,6 @@ As a price perspective, it doesn't depend on users but their data they scanned f
 For accessing purpose there is a documention you can research. It says that: <br />
 -Athena service quotas are shared across all workgroups in an account.<br />
 -The maximum number of workgroups you can create per Region in an account is 1000.<br />
-
 [Service Limits](https://docs.aws.amazon.com/athena/latest/ug/service-limits.html)
 
 
