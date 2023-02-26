@@ -1,4 +1,11 @@
 AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  CatalogId:
+    Type: String
+    Description: The Catalog ID for the Glue table.
+  ImageUri:
+      Type: String
+      Description: ImageURI for lambda.
 Resources:
   AthenaDatabase:
     Type: 'AWS::Glue::Database'
