@@ -294,7 +294,7 @@ Resources:
     Properties:
       PackageType: Image
       Code:
-        ImageUri: 740062030037.dkr.ecr.us-west-2.amazonaws.com/data-quality-ecr:latest
+        ImageUri:  ${{ env.IMAGE_URI }}
       Role: !GetAtt MyLambdaExecutionRole.Arn
       Timeout: 300
 
