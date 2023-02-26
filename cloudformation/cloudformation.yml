@@ -294,8 +294,12 @@ Resources:
           HadoopJarStep:
             Jar: "command-runner.jar"
             Args:
-              - "spark-submit"
-              - "s3://mysparkawsbucket/spark-app.py"
+            - "spark-submit"
+            - "--py-files"
+            - "s3://mysparkawsbucket/main.py"
+            - "s3://mysparkawsbucket/file_processor.py"
+            - "s3://mysparkawsbucket/function_lookup.py"
+            - "s3://mysparkawsbucket/file_processor.py"
 
 
   MyLambdaFunction:
