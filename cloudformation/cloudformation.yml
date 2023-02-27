@@ -151,9 +151,6 @@ Resources:
             - Name: date
               Type: string
               Comment: The unique identifier of the date
-            - Name: date_ex
-              Type: date
-              Comment: The unique identifier of the date
             - Name: weekend
               Type: int
               Comment: Weekend or not

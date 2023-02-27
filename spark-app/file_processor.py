@@ -10,6 +10,11 @@ class FileParser:
     s3_key: str
     
     def parse(self):
+        """
+        Loops through the data, applies the appropriate lookup process function to the DataFrame,
+        and updates the DataFrame with the processed data.
+        """
+        
         lookup_process = {
             "item_price": process_item_price,
             "category": process_category,
