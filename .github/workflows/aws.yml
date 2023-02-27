@@ -46,7 +46,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-west-2
     - name: Upload spark-app.py to S3
-      uses: docker://amazon/aws-cli:2.0.7
+      uses: docker://amazon/aws-cli:latest
       with:
         args: |
           aws s3 cp spark-app/main.py s3://mysparkawsbucket/main.py
