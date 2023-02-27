@@ -49,10 +49,10 @@ jobs:
       uses: docker://amazon/aws-cli:2.0.7
       with:
         args: |
-          - aws s3 cp spark-app/main.py s3://mysparkawsbucket/main.py
-          - aws s3 cp spark-app/file_processor.py s3://mysparkawsbucket/file_processor.py
-          - aws s3 cp spark-app/function_lookup.py s3://mysparkawsbucket/function_lookup.py
-          - aws s3 cp spark-app/utils.py s3://mysparkawsbucket/utils.py
+          s3 cp spark-app/main.py s3://mysparkawsbucket/main.py
+          s3 cp spark-app/file_processor.py s3://mysparkawsbucket/file_processor.py
+          s3 cp spark-app/function_lookup.py s3://mysparkawsbucket/function_lookup.py
+          s3 cp spark-app/utils.py s3://mysparkawsbucket/utils.py
 
   cloudformation:
     runs-on: ubuntu-latest
