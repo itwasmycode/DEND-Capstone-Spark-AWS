@@ -4,14 +4,16 @@
 As a data engineer, I was responsible for developing an open ended project. 
 
 ### Achievements
-As their data engineer, I was responsible for building out an ETL pipeline, extracting data from S3, staging in Redshift, and transforming the data into a set of dimensional tables for their analytics team to continue finding insights in what songs their users are listening to. The database and ETL pipeline were validated by running queries provided by the analytics team and compared expected results.
+As their data engineer, I was responsible for building out an ETL pipeline, extracting data from S3, staging in Glue Tables, and transforming the data into a set of dimensional tables for their analytics team to continue finding insights in what songs their users are listening to. The database and ETL pipeline were validated by running queries provided by the analytics team and compared expected results.
 Skills include:
 * Building out an ETL pipeline using AWS Cloudformation, Spark, Python and Github Actions.
 * Setting up IAM Roles, EMR Clusters, Config files and security groups.
 * Creating a Data Lake to parquet files accessible by Athena, Glue, Cloudwatch.
 
 # Run The Scripts
-Python files in this repo include `simple-spark-app.py`. The process will start by pushing any command to main branch using `PUSH command`. `cloudformation.yml` will execute on AWS us-west-2 region and build up whole infrastructure one-click. This will copy .py file to S3 and build EMR clusters, IAM roles, and EMR step.
+Python files in this repo include `main.py`. The process will start by pushing any command to main branch using `PUSH command`. `cloudformation.yml` will execute on AWS us-west-2 region and build up whole infrastructure one-click. This will copy .py file to S3 and build EMR clusters, IAM roles, and EMR step.
+
+Data-quality checks located and will be deployed via Github Actions with Cloudformation Template.
 
 All configurations, secrets kept in Github Secrets, so Github actions and Cloudformation Template can access any information when they needed.
 
