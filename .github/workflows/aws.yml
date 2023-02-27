@@ -51,26 +51,18 @@ jobs:
       with:
         python-version: 3.7
 
-    - name: Install AWS CLI
+    - name: Install and configure AWS CLI
       run: |
-        pip install awscli --upgrade --user
-        export PATH=$PATH:$HOME/.local/bin
-        
-    - name: Upload spark-app.py to S3
+        sudo apt-get update && sudo apt-get install -y python3-pip
+        sudo pip3 install awscli
+        aws configure set default.s3.max_concurrent_requests 30
+        aws configure set default.s3.multipart_threshold 64MB
+    - name: Upload Python files to S3
       run: |
-        docker pull amazon/aws-cli:latest
-        docker run --rm \
-          -v $PWD/spark-app:/app \
-          amazon/aws-cli s3 cp /app/main.py s3://mysparkawsbucket/main.py
-        docker run --rm \
-          -v $PWD/spark-app:/app \
-          amazon/aws-cli s3 cp /app/file_processor.py s3://mysparkawsbucket/file_processor.py
-        docker run --rm \
-          -v $PWD/spark-app:/app \
-          amazon/aws-cli s3 cp /app/function_lookup.py s3://mysparkawsbucket/function_lookup.py
-        docker run --rm \
-          -v $PWD/spark-app:/app \
-          amazon/aws-cli s3 cp /app/utils.py s3://mysparkawsbucket/utils.py
+        aws s3 cp spark-app/main.py s3://mysparkawsbucket/main.py
+        aws s3 cp spark-app/file_processor.py s3://mysparkawsbucket/file_processor.py
+        aws s3 cp spark-app/function_lookup.py s3://mysparkawsbucket/function_lookup.py
+        aws s3 cp spark-app/utils.py s3://mysparkawsbucket/utils.py
 
   cloudformation:
     runs-on: ubuntu-latest
