@@ -55,15 +55,21 @@ jobs:
       run: |
         pip install awscli --upgrade --user
         export PATH=$PATH:$HOME/.local/bin
-
+        
     - name: Upload spark-app.py to S3
-      uses: docker://amazon/aws-cli:latest
-      with:
-        args: |
-          "s3 cp spark-app/main.py s3://mysparkawsbucket/main.py"
-          "s3 cp spark-app/file_processor.py s3://mysparkawsbucket/file_processor.py"
-          "s3 cp spark-app/function_lookup.py s3://mysparkawsbucket/function_lookup.py"
-          "s3 cp spark-app/utils.py s3://mysparkawsbucket/utils.py"
+      run: |
+        docker run --rm \
+          -v $PWD/spark-app:/app \
+          amazon/aws-cli s3 cp /app/main.py s3://mysparkawsbucket/main.py
+        docker run --rm \
+          -v $PWD/spark-app:/app \
+          amazon/aws-cli s3 cp /app/file_processor.py s3://mysparkawsbucket/file_processor.py
+        docker run --rm \
+          -v $PWD/spark-app:/app \
+          amazon/aws-cli s3 cp /app/function_lookup.py s3://mysparkawsbucket/function_lookup.py
+        docker run --rm \
+          -v $PWD/spark-app:/app \
+          amazon/aws-cli s3 cp /app/utils.py s3://mysparkawsbucket/utils.py
 
   cloudformation:
     runs-on: ubuntu-latest
