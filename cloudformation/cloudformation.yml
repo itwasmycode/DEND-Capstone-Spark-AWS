@@ -296,7 +296,7 @@ Resources:
             Args:
             - "spark-submit"
             - "--py-files"
-            - "s3://mysparkawsbucket/file_processor.py,s3://mysparkawsbucket/function_lookup.py,s3://mysparkawsbucket/file_processor.py"
+            - "s3://mysparkawsbucket/file_processor.py,s3://mysparkawsbucket/function_lookup.py,s3://mysparkawsbucket/utils.py"
             - "s3://mysparkawsbucket/main.py"
 
   MyLambdaFunction:
