@@ -58,6 +58,7 @@ jobs:
         
     - name: Upload spark-app.py to S3
       run: |
+        docker pull amazon/aws-cli:latest
         docker run --rm \
           -v $PWD/spark-app:/app \
           amazon/aws-cli s3 cp /app/main.py s3://mysparkawsbucket/main.py
